@@ -7,11 +7,15 @@
     <style> body {padding: 0; margin: 0;} </style>
     <script src="js/p5.min.js"></script>
     <script src="js/addons/p5.dom.min.js"></script>
-    <!-- <script src="js/addons/p5.sound.min.js"></script> -->
+    <script src="js/addons/p5.sound.min.js"></script>
     <script src="js/addons/p5.play.js"></script>
     <script src="js/sketch.js"></script>
   </head>
   <body>
-
+    <script src="js/mocha.js"></script>
+    <script>mocha.setup('bdd');</script>
+    <script src="node_modules/chai/chai.js" charset="utf-8"></script>
+    <script src="js/require.js" charset="utf-8"></script>
+    <script src="test/calculator.test.js"></script>
   </body>
 </html>
