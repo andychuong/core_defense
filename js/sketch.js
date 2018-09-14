@@ -3,7 +3,10 @@ let gameStage = 0
 let health = 100
 let midX
 let midY
-let deg = 0
+let deg = Math.PI
+let deg2 = Math.PI/2
+let deg3 = -Math.PI/2
+let deg4 = 2*Math.PI
 
 
 
@@ -57,6 +60,9 @@ function draw() {
     // ellipse(midX + (50*cos(deg)), midY + (50*sin(deg)), 20, 20)
     translate(width/2,height/2);
     ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
+    ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
+    ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
+    ellipse(50 * cos(deg4), 50 * sin(deg4), 20, 20)
 
 }
 // function mousePressed() {
@@ -65,8 +71,14 @@ function draw() {
 function keyPressed() {
     if(key === "a"){
       deg -= .25
+      deg2 -= .25
+      deg3 -= .25
+      deg4 -= .25
     }if(key === "d"){
       deg += .25
+      deg2 += .25
+      deg3 += .25
+      deg4 += .25
     }
 }
 function hit() {
