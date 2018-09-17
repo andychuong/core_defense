@@ -24,7 +24,6 @@ let diff
 // Collision Groups
 let shields
 let projectiles
-// DOM STUFF
 
 function setup() {
   // put setup code here
@@ -43,6 +42,15 @@ function setup() {
   // Collision groups
   shields = new Group()
   projectiles = new Group()
+  for (let i = 0; i < (diff * 8); i++) {
+    // set random direction
+    let ang = random(360);
+    let px = width/2  * cos(radians(ang));
+    let py = height/2 * sin(radians(ang));
+    //create sprite
+    createProjectile(px,py)
+    console.log(i)
+  }
 }
 
 function draw() {
@@ -58,10 +66,9 @@ function draw() {
   // Draw shields
   drawShields()
 
-  for (let i = 0; i < (diff * 5); i++) {
-    //create sprite
-    // set random direction
-  }
+
+
+  drawSprites();
 }
 
 function drawCore() {
@@ -115,6 +122,25 @@ function updateShields() {
   }
 }
 
+function createProjectile(x, y) {
+  let a = createSprite(x, y);
+  // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
+  // a.addImage(img);
+  a.setSpeed(4, random(360));
+  a.rotationSpeed = 0.5;
+  //a.debug = true;
+  // a.type = type;
+
+  // if(type == 2)
+  a.scale = 0.2;
+  // if(type == 1)
+  //   a.scale = 0.3;
+
+  // a.mass = 2+a.scale;
+  a.setCollider('circle', 0, 0, 50);
+  projectiles.add(a);
+  return a;
+}
 function hit() {
   health -= 10;
   if (health === 0) {
@@ -130,22 +156,19 @@ function gg() {
   gameStage = 2
 }
 
-
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
   let width = canvasDiv.offsetWidth
   let height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
 }
-// Non p5.js code --- >
+// Non p5.js code ~ domcontentloaded
 function init() {
+  // DOM
   document.getElementById("mainHeader").innerText = 'Core Defense'
 }
 
 window.addEventListener('load', init);
-
-
-
 
 // OLD CODE. REF MATERIAL ------------>>>>>
 
