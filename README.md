@@ -14,7 +14,18 @@ The goal of this game is to protect the core. There are four shields floating ar
 
 ## Controls
 
-Work in progress....
+Player Movement
+* W: Move player up
+* S: Move player down
+* A: Move player left
+* D: Move player right
+
+Shield Rotations
+* Left Arrow: Rotate shields left
+* Right Arrow: Rotate shields right
+
+## Planning
+[https://trello.com/b/GmAUbxzj/q1-project]
 
 ### Technology
 * HTML, CSS, JavaScript
