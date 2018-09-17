@@ -29,16 +29,16 @@ let projectiles
 
 function setup() {
   // put setup code here
-  let canvasDiv = document.getElementById('container')
+  let canvasDiv = document.getElementById('canvasDiv')
   let width = canvasDiv.offsetWidth
-  let height = canvasDiv.offsetHeight - (canvasDiv.offsetHeight/10)
+  let height = windowHeight - (windowHeight/5)
   background(10)
-  var myCanvas = createCanvas(width, windowHeight - (windowHeight/10));
-  myCanvas.parent("container")
+  var myCanvas = createCanvas(width, height);
+  myCanvas.parent("canvasDiv")
   // Init globals --- >>
   // Core Coordinates
   coreX = width / 2
-  coreY = (windowHeight - (windowHeight/10)) / 2
+  coreY = height / 2
   // Difficulty and spawns (spawns = 5 * diff)
   diff = 1
   // Collision groups

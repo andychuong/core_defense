@@ -4,6 +4,10 @@
   width: 80%;
 }
 
+header{
+  text-align: center;
+}
+
 #defaultCanvas0{
   padding-left: 0;
   padding-right: 0;
