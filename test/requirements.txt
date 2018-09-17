@@ -1,0 +1,18 @@
+The Frontend Project should:
+[x]You must include HTML, CSS, and JavaScript.
+[]You must use a CSS Framework such as Bootstrap or Materialize.
+[x]You must organize your code with functions.
+[x]You must separate your HTML, CSS, and JavaScript into multiple files.
+[]You must include some client-side validation.
+[]You must store some data in Local Storage.
+[x]You must allow for users to be able to interact with the site.
+[]Integrate with at least one API. See api-list  or Programmable Web API list  for ideas. Be sure to vet your API before committing to it.
+[]Have at least three tested functions.
+[]You must deploy your site.
+
+To successfully complete the project, you must:
+[]Use a project planning tool such as Pivotal Tracker or Trello.
+[]Make multiple commits with readable commit messages.
+[]Include a readme with installation instructions and screenshots.
+[]Add your project to an online portfolio.
+[]Present your project to your class.
