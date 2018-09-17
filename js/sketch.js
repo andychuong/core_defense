@@ -25,6 +25,8 @@ let diff
 let shields
 let projectiles
 
+var WALL_THICKNESS = 30;
+
 function setup() {
   // put setup code here
   let canvasDiv = document.getElementById('canvasDiv')
@@ -42,6 +44,19 @@ function setup() {
   // Collision groups
   shields = new Group()
   projectiles = new Group()
+
+  wallTop = createSprite(0, -height/2-WALL_THICKNESS/2, width+WALL_THICKNESS*2, WALL_THICKNESS);
+  wallTop.immovable = true;
+
+  wallBottom = createSprite(0, height/2+WALL_THICKNESS/2, width+WALL_THICKNESS*2, WALL_THICKNESS);
+  wallBottom.immovable = true;
+
+  wallLeft = createSprite(-width/2-WALL_THICKNESS/2, height/2, WALL_THICKNESS, height);
+  wallLeft.immovable = true;
+
+  wallRight = createSprite(width/2+WALL_THICKNESS/2, height/2, WALL_THICKNESS, height);
+  wallRight.immovable = true;
+
   for (let i = 0; i < (diff * 8); i++) {
     // set random direction
     let ang = random(360);
@@ -66,6 +81,10 @@ function draw() {
   // Draw shields
   drawShields()
 
+  projectiles.bounce(wallTop);
+  projectiles.bounce(wallBottom);
+  projectiles.bounce(wallLeft);
+  projectiles.bounce(wallRight);
 
 
   drawSprites();
