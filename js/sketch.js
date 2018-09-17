@@ -12,13 +12,13 @@ let health = 100
 let coreX
 let coreY
 // Speed Controls
-let rotateSpd = .06
-let playerSpd = 2
+const rotateSpd = .06
+const playerSpd = 2
 // Set up core and shields
-let coreSize = 40
+const coreSize = 40
 let myCore
-let armLength = 70
-let shieldSize = 15
+const armLength = 70
+const shieldSize = 15
 let shield0
 let shield1
 let shield2
@@ -107,7 +107,7 @@ function createCore() {
   let img = loadImage('img/core1.png');
   myCore = createSprite(coreX, coreY)
   myCore.setCollider('circle', 0, 0, 50)
-  myCore.shapeColor = "#00ddff"
+  // myCore.shapeColor = "#00ddff"
   myCore.addImage(img)
 }
 

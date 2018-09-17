@@ -1,21 +1,26 @@
-body{
+body {
   font-family: sans-serif;
   background-color: #555;
 }
-#container{
+
+#container {
   margin-left: auto;
   margin-right: auto;
   width: 80%;
 }
 
-header{
+header {
   text-align: center;
 }
 
-#defaultCanvas0{
+#defaultCanvas0 {
   padding-left: 0;
   padding-right: 0;
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+
+footer {
+  text-align: center;
 }

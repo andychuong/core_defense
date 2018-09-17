@@ -1,16 +1,17 @@
-# humanstxt.org/
-# The humans responsible & technology colophon
-
 # TEAM
 
-    Andy Chuong
+    andy chuong
+    andy@chuong.io
+    Boulder, Colorado. USA
 
 # THANKS
 
-    <name>
+    galvanize, processing.org, molleindustria
 
-# TECHNOLOGY COLOPHON
+# SITE
 
-    CSS3, HTML5, JavaScript
-    P5.js, P5play.js
-    
+    Last update: 2018/09/17
+    Standards: CSS3, HTML5, JavaScript
+    Components: P5.js, P5play.js
+    Software: Atom
+    GitHub repository: https://github.com/andychuong/core_defense
