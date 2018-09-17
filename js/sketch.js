@@ -24,16 +24,14 @@ let diff
 // Collision Groups
 let shields
 let projectiles
-
-var wallThickness = 30;
+// Border wall thickness
+let wallThickness = 30;
 
 function setup() {
   // put setup code here
   let canvasDiv = document.getElementById('canvasDiv')
   var width = canvasDiv.offsetWidth
   var height = windowHeight - (windowHeight / 5)
-  var width2 = canvasDiv.offsetWidth
-  var height2 = windowHeight - (windowHeight / 5)
   background(10)
   var myCanvas = createCanvas(width, height);
   myCanvas.parent("canvasDiv")
@@ -46,18 +44,15 @@ function setup() {
   // Collision groups
   shields = new Group()
   projectiles = new Group()
+  // Border walls
   createWalls()
-  drawSprites()
-
-
+  // Create projectiles
   for (let i = 0; i < (diff * 8); i++) {
     // set random direction
-    let ang = random(360);
-    let px = width/2  * cos(radians(ang));
-    let py = height/2 * sin(radians(ang));
+    let px = width * random()
+    let py = height * random()
     //create sprite
-    createProjectile(px,py)
-    console.log(i)
+    createProjectile(px, py)
   }
 }
 
@@ -83,17 +78,17 @@ function draw() {
   drawSprites();
 }
 
-function createWalls(){
-  wallTop = createSprite(width/2, -wallThickness/2, width+wallThickness*2, wallThickness);
+function createWalls() {
+  wallTop = createSprite(width / 2, -wallThickness / 2, width + wallThickness * 2, wallThickness);
   wallTop.immovable = true;
 
-  wallBottom = createSprite(width/2, height+wallThickness/2, width+wallThickness*2, wallThickness);
+  wallBottom = createSprite(width / 2, height + wallThickness / 2, width + wallThickness * 2, wallThickness);
   wallBottom.immovable = true;
 
-  wallLeft = createSprite(-wallThickness/2, height/2, wallThickness, height);
+  wallLeft = createSprite(-wallThickness / 2, height / 2, wallThickness, height);
   wallLeft.immovable = true;
 
-  wallRight = createSprite(width+wallThickness/2, height/2, wallThickness, height);
+  wallRight = createSprite(width + wallThickness / 2, height / 2, wallThickness, height);
   wallRight.immovable = true;
 }
 
@@ -117,7 +112,6 @@ function updateCore() {
     coreX += playerSpd
   }
 }
-
 
 function drawShield(deg) {
   ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
@@ -164,6 +158,7 @@ function createProjectile(x, y) {
   projectiles.add(a);
   return a;
 }
+
 function hit() {
   health -= 10;
   if (health === 0) {
@@ -180,10 +175,11 @@ function gg() {
 }
 
 function windowResized() {
-  // let canvasDiv = document.getElementById('canvasDiv')
-  // let width = canvasDiv.offsetWidth
-  // let height = windowHeight - (windowHeight / 5)
-  // resizeCanvas(width, height);
+  let canvasDiv = document.getElementById('canvasDiv')
+  let width = canvasDiv.offsetWidth
+  let height = windowHeight - (windowHeight / 5)
+  resizeCanvas(width, height);
+
 }
 // Non p5.js code ~ domcontentloaded
 function init() {
