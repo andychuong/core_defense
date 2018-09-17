@@ -16,24 +16,29 @@ let rotateSpd = .05
 let playerSpd = 1
 // Initial Shield Rotations
 let deg = Math.PI
-let deg2 = Math.PI/2
-let deg3 = -Math.PI/2
-let deg4 = 2*Math.PI
+let deg2 = Math.PI / 2
+let deg3 = -Math.PI / 2
+let deg4 = 2 * Math.PI
 // Difficulty
 let diff
 // Collision Groups
 let shields
 let projectiles
+// DOM STUFF
+
 
 function setup() {
   // put setup code here
-
-  var myCanvas = createCanvas(windowWidth -5, windowHeight-5);
+  let canvasDiv = document.getElementById('container')
+  let width = canvasDiv.offsetWidth
+  let height = canvasDiv.offsetHeight - (canvasDiv.offsetHeight/10)
+  background(10)
+  var myCanvas = createCanvas(width, windowHeight - (windowHeight/10));
   myCanvas.parent("container")
   // Init globals --- >>
   // Core Coordinates
-  coreX = windowWidth/2
-  coreY = windowHeight/2
+  coreX = width / 2
+  coreY = (windowHeight - (windowHeight/10)) / 2
   // Difficulty and spawns (spawns = 5 * diff)
   diff = 1
   // Collision groups
@@ -42,63 +47,64 @@ function setup() {
 }
 
 function draw() {
-  // put drawing code here
-    background(255);
-    fill(10)
-    rect(100,100, windowWidth - 200, windowHeight - 200);
+  // put drawing code Here
+  // Play Window
+  background(10);
+  // fill(10)
+  // rect(100, 100, windowWidth - 200, windowHeight - 200);
 
-    // Move player
+  // Move player
 
-    if (keyDown('w')) {
-      coreY -= playerSpd
-    }
-    if (keyDown('s')) {
-      coreY += playerSpd
-    }
-    if (keyDown('a')) {
-      coreX -= playerSpd
-    }
-    if (keyDown('d')) {
-      coreX += playerSpd
-    }
+  if (keyDown('w')) {
+    coreY -= playerSpd
+  }
+  if (keyDown('s')) {
+    coreY += playerSpd
+  }
+  if (keyDown('a')) {
+    coreX -= playerSpd
+  }
+  if (keyDown('d')) {
+    coreX += playerSpd
+  }
 
-    // Draw 'core'
-    fill(255,0,0)
-    ellipseMode(CENTER)
-    ellipse(coreX, coreY, 25, 25)
+  // Draw 'core'
+  fill(255, 0, 0)
+  ellipseMode(CENTER)
+  ellipse(coreX, coreY, 25, 25)
 
-    fill(0,255,0)
-    // Key Down - Rotate shields
-    if (keyDown(LEFT_ARROW)) {
-      deg -= rotateSpd
-      deg2 -= rotateSpd
-      deg3 -= rotateSpd
-      deg4 -= rotateSpd
-    }
-    if (keyDown(RIGHT_ARROW)) {
-      deg += rotateSpd
-      deg2 += rotateSpd
-      deg3 += rotateSpd
-      deg4 += rotateSpd
-    }
+  fill(0, 255, 0)
+  // Key Down - Rotate shields
+  if (keyDown(LEFT_ARROW)) {
+    deg -= rotateSpd
+    deg2 -= rotateSpd
+    deg3 -= rotateSpd
+    deg4 -= rotateSpd
+  }
+  if (keyDown(RIGHT_ARROW)) {
+    deg += rotateSpd
+    deg2 += rotateSpd
+    deg3 += rotateSpd
+    deg4 += rotateSpd
+  }
 
-    // Adjust origin
-    translate(coreX,coreY);
-    // Draw shields
-    ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
-    ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
-    ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
-    ellipse(50 * cos(deg4), 50 * sin(deg4), 20, 20)
+  // Adjust origin
+  translate(coreX, coreY);
+  // Draw shields
+  ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
+  ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
+  ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
+  ellipse(50 * cos(deg4), 50 * sin(deg4), 20, 20)
 
-    for(let i = 0; i < (diff * 5);i++){
-        //create sprite
-        // set random direction
-    }
+  for (let i = 0; i < (diff * 5); i++) {
+    //create sprite
+    // set random direction
+  }
 }
 
 function hit() {
   health -= 10;
-  if (health === 0){
+  if (health === 0) {
     gg()
   }
 }
@@ -108,21 +114,20 @@ function getHp() {
 }
 
 function gg() {
-  gameStage = 3
+  gameStage = 2
 }
 
 
-
-function windowResized(){
-	resizeCanvas(windowWidth -5, windowHeight-5);
+function windowResized() {
+  resizeCanvas(windowWidth - 5, windowHeight - 5);
 }
 
-// function init(){
-//
-// }
-//
-// window.addEventListener('load', init);
-//
+function init(){
+
+}
+
+window.addEventListener('load', init);
+
 
 
 
