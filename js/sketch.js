@@ -13,12 +13,21 @@ let coreX
 let coreY
 // Speed Controls
 let rotateSpd = .05
-let playerSpd = 1
+let playerSpd = 1.5
+// Set up core and shields
+let coreSize = 40
+let myCore
+let armLength = 70
+let shieldSize = 15
+let shield0
+let shield1
+let shield2
+let shield3
 // Initial Shield Rotations
-let deg = Math.PI
+let deg0 = Math.PI
+let deg1 = 2 * Math.PI
 let deg2 = Math.PI / 2
 let deg3 = -Math.PI / 2
-let deg4 = 2 * Math.PI
 // Difficulty
 let diff
 // Collision Groups
@@ -40,14 +49,22 @@ function setup() {
   coreX = width / 2
   coreY = height / 2
   // Difficulty and spawns (spawns = 5 * diff)
-  diff = 1
+  diff = 5
   // Collision groups
   shields = new Group()
   projectiles = new Group()
   // Border walls
   createWalls()
+  // Create core
+  myCore = createSprite(coreX,coreY, coreSize, coreSize)
+  myCore.setCollider('circle', 0, 0, coreSize + 20)
+  // Create Shields
+  push()
+  myCanvas.translate(coreX, coreY)
+  createShields()
+  pop()
   // Create projectiles
-  for (let i = 0; i < (diff * 8); i++) {
+  for (let i = 0; i < (diff * 10); i++) {
     // set random direction
     let px = width * random()
     let py = height * random()
@@ -57,25 +74,19 @@ function setup() {
 }
 
 function draw() {
-
-  // put drawing code Here
-  // Play Window
+  // Reset Background before drawing
   background(10);
-  // update 'core'
+  // Update Core's x, y
   updateCore()
-  // Draw 'core'
-  drawCore()
-  // Key Down - Rotate shields
+  // Update Shields' rotations
   updateShields()
-  // Draw shields
-  drawShields()
-
-  projectiles.bounce(wallTop);
-  projectiles.bounce(wallBottom);
-  projectiles.bounce(wallLeft);
-  projectiles.bounce(wallRight);
-
-  drawSprites();
+  // Bounds check
+  wallBounce()
+  // Collision
+  projectiles.overlap(shields, hitShield);
+  projectiles.overlap(myCore, hitCore)
+  // Draw all Sprites
+    drawSprites();
 }
 
 function createWalls() {
@@ -92,10 +103,11 @@ function createWalls() {
   wallRight.immovable = true;
 }
 
-function drawCore() {
-  fill(255, 0, 0)
-  ellipseMode(CENTER)
-  ellipse(coreX, coreY, 25, 25)
+function wallBounce(){
+  projectiles.bounce(wallTop);
+  projectiles.bounce(wallBottom);
+  projectiles.bounce(wallLeft);
+  projectiles.bounce(wallRight);
 }
 
 function updateCore() {
@@ -111,61 +123,77 @@ function updateCore() {
   if (keyDown('d')) {
     coreX += playerSpd
   }
+  myCore.position.x = constrain(coreX,0+armLength, width - armLength)
+  myCore.position.y = constrain(coreY,0-armLength, height - armLength)
 }
 
-function drawShield(deg) {
-  ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
-}
-
-function drawShields() {
-  // Adjust origin
-  push()
-  translate(coreX, coreY);
-  ellipseMode(CENTER)
-  fill(0, 255, 0)
-  drawShield(deg)
-  drawShield(deg2)
-  drawShield(deg3)
-  drawShield(deg4)
-  pop()
-
+function createShields() {
+  shield0 = createSprite(coreX + armLength * cos(deg0), coreY + armLength * sin(deg0), shieldSize, shieldSize)
+  shields.add(shield0)
+  shield0.setCollider('circle', 0, 0, shieldSize -5)
+  shield1 = createSprite(coreX + armLength * cos(deg1), coreY + armLength * sin(deg1), shieldSize, shieldSize)
+  shields.add(shield1)
+  shield1.setCollider('circle', 0, 0, shieldSize -5)
+  shield2 = createSprite(coreX + armLength * cos(deg2), coreY + armLength * sin(deg2), shieldSize, shieldSize)
+  shields.add(shield2)
+  shield2.setCollider('circle', 0, 0, shieldSize -5)
+  shield3 = createSprite(coreX + armLength * cos(deg3), coreY + armLength * sin(deg3), shieldSize, shieldSize)
+  shields.add(shield3)
+  shield3.setCollider('circle', 0, 0, shieldSize -5)
 }
 
 function updateShields() {
   if (keyDown(LEFT_ARROW)) {
-    deg -= rotateSpd
+    deg0 -= rotateSpd
+    deg1 -= rotateSpd
     deg2 -= rotateSpd
     deg3 -= rotateSpd
-    deg4 -= rotateSpd
   }
   if (keyDown(RIGHT_ARROW)) {
-    deg += rotateSpd
+    deg0 += rotateSpd
+    deg1 += rotateSpd
     deg2 += rotateSpd
     deg3 += rotateSpd
-    deg4 += rotateSpd
   }
+  shield0.position.x = (coreX + armLength * cos(deg0))
+  shield0.position.y = (coreY + armLength * sin(deg0))
+
+  shield1.position.x = (coreX + armLength * cos(deg1))
+  shield1.position.y = (coreY + armLength * sin(deg1))
+
+  shield2.position.x = (coreX + armLength * cos(deg2))
+  shield2.position.y = (coreY + armLength * sin(deg2))
+
+  shield3.position.x = (coreX + armLength * cos(deg3))
+  shield3.position.y = (coreY + armLength * sin(deg3))
 }
 
 function createProjectile(x, y) {
-  let a = createSprite(x, y);
+  let a = createSprite(x, y, 50, 50);
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
   // a.addImage(img);
-  a.setSpeed(4, random(360));
-  a.rotationSpeed = 0.5;
+  a.setSpeed(7, random(360))
+  a.rotationSpeed = 0.5
   //a.debug = true;
-  a.scale = 0.2;
-  a.setCollider('circle', 0, 0, 50);
-  projectiles.add(a);
+  a.scale = 0.2
+  a.setCollider('circle', 0, 0, 10)
+  projectiles.add(a)
   return a;
 }
 
-function hit() {
-  health -= 10;
-  if (health === 0) {
-    gg()
-  }
+function hitShield(projectile,shield) {
+  // health -= 10;
+  // if (health === 0) {
+  //   gg()
+  // }
+  console.log('hit')
+  projectile.remove();
 }
 
+function hitCore(projectile,myCore){
+  console.log('corehit')
+  projectile.remove()
+}
 function getHp() {
   health += 10
 }
@@ -225,4 +253,11 @@ window.addEventListener('load', init);
 //   case keyDown('d'):
 //     coreX += playerSpd
 //     break
+// }
+
+//
+// function drawCore() {
+//   fill(255, 0, 0)
+//   ellipseMode(CENTER)
+//   ellipse(coreX, coreY, 25, 25)
 // }
