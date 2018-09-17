@@ -50,11 +50,8 @@ function draw() {
   // put drawing code Here
   // Play Window
   background(10);
-  // fill(10)
-  // rect(100, 100, windowWidth - 200, windowHeight - 200);
 
-  // Move player
-
+  // Move 'core'
   if (keyDown('w')) {
     coreY -= playerSpd
   }
@@ -73,7 +70,6 @@ function draw() {
   ellipseMode(CENTER)
   ellipse(coreX, coreY, 25, 25)
 
-  fill(0, 255, 0)
   // Key Down - Rotate shields
   if (keyDown(LEFT_ARROW)) {
     deg -= rotateSpd
@@ -91,6 +87,7 @@ function draw() {
   // Adjust origin
   translate(coreX, coreY);
   // Draw shields
+  fill(0, 255, 0)
   ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
   ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
   ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
@@ -119,9 +116,12 @@ function gg() {
 
 
 function windowResized() {
-  resizeCanvas(windowWidth - 5, windowHeight - 5);
+  let canvasDiv = document.getElementById('canvasDiv')
+  let width = canvasDiv.offsetWidth
+  let height = windowHeight - (windowHeight/5)
+  resizeCanvas(width, height);
 }
-
+// Non p5.js code --- >
 function init(){
 
 }
