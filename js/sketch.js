@@ -139,7 +139,7 @@ function windowResized() {
 }
 // Non p5.js code --- >
 function init() {
-
+  document.getElementById("mainHeader").innerText = 'Core Defense'
 }
 
 window.addEventListener('load', init);
