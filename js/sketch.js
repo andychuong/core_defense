@@ -11,6 +11,9 @@ let health = 100
 // Coordinates for core / player
 let coreX
 let coreY
+// Speed Controls
+let rotateSpd = .05
+let playerSpd = 1
 // Initial Shield Rotations
 let deg = Math.PI
 let deg2 = Math.PI/2
@@ -45,20 +48,18 @@ function draw() {
     rect(100,100, windowWidth - 200, windowHeight - 200);
 
     // Move player
-    switch(true){
-      case keyDown('w'):
-        coreY--
-        break
-      case keyDown('s'):
-        coreY++
-        break
-      case keyDown('a'):
-        coreX--
-        break
-      case keyDown('d'):
-        coreX++
-        break
 
+    if (keyDown('w')) {
+      coreY -= playerSpd
+    }
+    if (keyDown('s')) {
+      coreY += playerSpd
+    }
+    if (keyDown('a')) {
+      coreX -= playerSpd
+    }
+    if (keyDown('d')) {
+      coreX += playerSpd
     }
 
     // Draw 'core'
@@ -69,16 +70,16 @@ function draw() {
     fill(0,255,0)
     // Key Down - Rotate shields
     if (keyDown(LEFT_ARROW)) {
-      deg -= .05
-      deg2 -= .05
-      deg3 -= .05
-      deg4 -= .05
+      deg -= rotateSpd
+      deg2 -= rotateSpd
+      deg3 -= rotateSpd
+      deg4 -= rotateSpd
     }
     if (keyDown(RIGHT_ARROW)) {
-      deg += .05
-      deg2 += .05
-      deg3 += .05
-      deg4 += .05
+      deg += rotateSpd
+      deg2 += rotateSpd
+      deg3 += rotateSpd
+      deg4 += rotateSpd
     }
 
     // Adjust origin
@@ -111,11 +112,11 @@ function gg() {
 }
 
 
-//
-// function windowResized(){
-// 	resizeCanvas(windowWidth,windowHeight);
-// }
-//
+
+function windowResized(){
+	resizeCanvas(windowWidth -5, windowHeight-5);
+}
+
 // function init(){
 //
 // }
@@ -145,4 +146,20 @@ function gg() {
 //       deg3 += .25
 //       deg4 += .25
 //     }
+// }
+
+// move player
+// switch(true){
+//   case keyDown('w'):
+//     coreY -= playerSpd
+//     break
+//   case keyDown('s'):
+//     coreY += playerSpd
+//     break
+//   case keyDown('a'):
+//     coreX -= playerSpd
+//     break
+//   case keyDown('d'):
+//     coreX += playerSpd
+//     break
 // }
