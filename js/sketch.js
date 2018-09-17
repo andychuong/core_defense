@@ -136,28 +136,28 @@ function createShields() {
 
   shield0 = createSprite(coreX + armLength * cos(deg0), coreY + armLength * sin(deg0))
   shields.add(shield0)
-  shield0.setCollider('circle', 0, 0, 28)
+  shield0.setCollider('circle', 0, 0, 32)
   shield0.shapeColor = "#00ff00"
   shield0.addImage(img);
   shield0.scale = 0.4;
 
   shield1 = createSprite(coreX + armLength * cos(deg1), coreY + armLength * sin(deg1))
   shields.add(shield1)
-  shield1.setCollider('circle', 0, 0, 28)
+  shield1.setCollider('circle', 0, 0, 32)
   shield1.shapeColor = "#00ff00"
   shield1.addImage(img);
   shield1.scale = 0.4;
 
   shield2 = createSprite(coreX + armLength * cos(deg2), coreY + armLength * sin(deg2))
   shields.add(shield2)
-  shield2.setCollider('circle', 0, 0, 28)
+  shield2.setCollider('circle', 0, 0, 32)
   shield2.shapeColor = "#00ff00"
   shield2.addImage(img);
   shield2.scale = 0.4;
 
   shield3 = createSprite(coreX + armLength * cos(deg3), coreY + armLength * sin(deg3))
   shields.add(shield3)
-  shield3.setCollider('circle', 0, 0, 28)
+  shield3.setCollider('circle', 0, 0, 32)
   shield3.shapeColor = "#00ff00"
   shield3.addImage(img);
   shield3.scale = 0.4;
@@ -200,14 +200,14 @@ function createProjectiles(diff) {
 }
 
 function createProjectile(x, y) {
-  let a = createSprite(x, y, 50, 50);
+  let a = createSprite(x, y, 10, 10);
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
   // a.addImage(img);
   // a.setSpeed(4.5, random(360))
   a.setSpeed(2, random(360))
   a.rotationSpeed = 0.5
   //a.debug = true;
-  a.scale = 0.2
+  // a.scale = 0.2
   a.shapeColor = "#ff2222"
   a.setCollider('circle', 0, 0, 10)
   projectiles.add(a)
