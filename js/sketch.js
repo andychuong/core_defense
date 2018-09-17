@@ -37,14 +37,14 @@ let projectiles
 let wallThickness = 30;
 
 function setup() {
-  // put setup code here
+  // Create canvas and add to dom ---------------------
   let canvasDiv = document.getElementById('canvasDiv')
   var width = canvasDiv.offsetWidth
   var height = windowHeight - (windowHeight / 5)
   background(10)
   var myCanvas = createCanvas(width, height);
   myCanvas.parent("canvasDiv")
-  // Init globals --- >>
+  // Set Global Initial Values ------------------------
   // Core Coordinates
   coreX = width / 2
   coreY = height / 2
@@ -56,21 +56,11 @@ function setup() {
   // Border walls
   createWalls()
   // Create core
-  myCore = createSprite(coreX,coreY, coreSize, coreSize)
-  myCore.setCollider('circle', 0, 0, coreSize + 20)
+  createCore()
   // Create Shields
-  push()
-  myCanvas.translate(coreX, coreY)
   createShields()
-  pop()
   // Create projectiles
-  for (let i = 0; i < (diff * 10); i++) {
-    // set random direction
-    let px = width * random()
-    let py = height * random()
-    //create sprite
-    createProjectile(px, py)
-  }
+  createProjectiles(diff)
 }
 
 function draw() {
@@ -102,14 +92,16 @@ function createWalls() {
   wallRight = createSprite(width + wallThickness / 2, height / 2, wallThickness, height);
   wallRight.immovable = true;
 }
-
 function wallBounce(){
   projectiles.bounce(wallTop);
   projectiles.bounce(wallBottom);
   projectiles.bounce(wallLeft);
   projectiles.bounce(wallRight);
 }
-
+function createCore(){
+  myCore = createSprite(coreX,coreY, coreSize, coreSize)
+  myCore.setCollider('circle', 0, 0, coreSize + 20)
+}
 function updateCore() {
   if (keyDown('w')) {
     if(coreY > armLength + shieldSize/2){
@@ -134,7 +126,6 @@ function updateCore() {
   myCore.position.x = constrain(coreX,0+armLength, width - armLength)
   myCore.position.y = constrain(coreY,0-armLength, height - armLength)
 }
-
 function createShields() {
   shield0 = createSprite(coreX + armLength * cos(deg0), coreY + armLength * sin(deg0), shieldSize, shieldSize)
   shields.add(shield0)
@@ -149,7 +140,6 @@ function createShields() {
   shields.add(shield3)
   shield3.setCollider('circle', 0, 0, shieldSize -5)
 }
-
 function updateShields() {
   if (keyDown(LEFT_ARROW)) {
     deg0 -= rotateSpd
@@ -175,7 +165,15 @@ function updateShields() {
   shield3.position.x = (coreX + armLength * cos(deg3))
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
-
+function createProjectiles(diff){
+  for (let i = 0; i < (diff * 10); i++) {
+    // set random direction
+    let px = width * random()
+    let py = height * random()
+    //create sprite
+    createProjectile(px, py)
+  }
+}
 function createProjectile(x, y) {
   let a = createSprite(x, y, 50, 50);
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
@@ -188,7 +186,6 @@ function createProjectile(x, y) {
   projectiles.add(a)
   return a;
 }
-
 function hitShield(projectile,shield) {
   // health -= 10;
   // if (health === 0) {
@@ -197,7 +194,6 @@ function hitShield(projectile,shield) {
   console.log('hit')
   projectile.remove();
 }
-
 function hitCore(projectile,myCore){
   console.log('corehit')
   projectile.remove()
@@ -205,11 +201,9 @@ function hitCore(projectile,myCore){
 function getHp() {
   health += 10
 }
-
 function gg() {
   gameStage = 2
 }
-
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
   let width = canvasDiv.offsetWidth
@@ -225,7 +219,7 @@ function init() {
 
 window.addEventListener('load', init);
 
-// OLD CODE. REF MATERIAL ------------>>>>>
+// OLD CODE. REF MATERIAL ------------>>>>> >>>> >>> >> >
 
 // function mousePressed() {
 //   deg -= .5
