@@ -33,6 +33,7 @@ let diff
 // Collision Groups
 let shields
 let projectiles
+let walls
 // Border wall thickness
 let wallThickness = 30;
 
@@ -49,10 +50,11 @@ function setup() {
   coreX = width / 2
   coreY = height / 2
   // Difficulty and spawns (spawns = 5 * diff)
-  diff = 3
+  diff = 5
   // Collision groups
   shields = new Group()
   projectiles = new Group()
+  walls = new Group()
   // Border walls
   createWalls()
   // Create core
@@ -71,39 +73,42 @@ function draw() {
   // Update Shields' rotations
   rotateShields()
   // Bounds check
-  wallBounce()
+  projectiles.bounce(walls)
   // Collision
-  projectiles.overlap(shields, hitShield);
+  projectiles.overlap(shields, hitShield)
   projectiles.overlap(myCore, hitCore)
   // Draw all Sprites
   drawSprites();
 }
 
 function createWalls() {
-  wallTop = createSprite(width / 2, -wallThickness / 2, width + wallThickness * 2, wallThickness);
+  wallTop = createSprite(width / 2, -wallThickness / 2 + 5, width + wallThickness * 2, wallThickness);
   wallTop.immovable = true;
+  walls.add(wallTop)
+  wallTop.shapeColor = "#ffffff"
 
-  wallBottom = createSprite(width / 2, height + wallThickness / 2, width + wallThickness * 2, wallThickness);
+  wallBottom = createSprite(width / 2, height + wallThickness / 2 - 5, width + wallThickness * 2, wallThickness);
   wallBottom.immovable = true;
+  walls.add(wallBottom)
+  wallBottom.shapeColor = "#ffffff"
 
-  wallLeft = createSprite(-wallThickness / 2, height / 2, wallThickness, height);
+  wallLeft = createSprite(-wallThickness / 2 + 5, height / 2, wallThickness, height);
   wallLeft.immovable = true;
+  walls.add(wallLeft)
+  wallLeft.shapeColor = "#ffffff"
 
-  wallRight = createSprite(width + wallThickness / 2, height / 2, wallThickness, height);
+  wallRight = createSprite(width + wallThickness / 2 - 5, height / 2, wallThickness, height);
   wallRight.immovable = true;
-}
-
-function wallBounce() {
-  projectiles.bounce(wallTop);
-  projectiles.bounce(wallBottom);
-  projectiles.bounce(wallLeft);
-  projectiles.bounce(wallRight);
+  walls.add(wallRight)
+  wallRight.shapeColor = "#ffffff"
 }
 
 function createCore() {
-  myCore = createSprite(coreX, coreY, coreSize, coreSize)
-  myCore.setCollider('circle', 0, 0, coreSize + 5)
+  let img = loadImage('img/core1.png');
+  myCore = createSprite(coreX, coreY)
+  myCore.setCollider('circle', 0, 0, 50)
   myCore.shapeColor = "#00ddff"
+  myCore.addImage(img)
 }
 
 function moveCore() {
@@ -136,29 +141,29 @@ function createShields() {
 
   shield0 = createSprite(coreX + armLength * cos(deg0), coreY + armLength * sin(deg0))
   shields.add(shield0)
-  shield0.setCollider('circle', 0, 0, 32)
-  shield0.shapeColor = "#00ff00"
+  shield0.setCollider('circle', 0, 0, 30)
+  // shield0.shapeColor = "#00ff00"
   shield0.addImage(img);
   shield0.scale = 0.4;
 
   shield1 = createSprite(coreX + armLength * cos(deg1), coreY + armLength * sin(deg1))
   shields.add(shield1)
-  shield1.setCollider('circle', 0, 0, 32)
-  shield1.shapeColor = "#00ff00"
+  shield1.setCollider('circle', 0, 0, 30)
+  // shield1.shapeColor = "#00ff00"
   shield1.addImage(img);
   shield1.scale = 0.4;
 
   shield2 = createSprite(coreX + armLength * cos(deg2), coreY + armLength * sin(deg2))
   shields.add(shield2)
-  shield2.setCollider('circle', 0, 0, 32)
-  shield2.shapeColor = "#00ff00"
+  shield2.setCollider('circle', 0, 0, 30)
+  // shield2.shapeColor = "#00ff00"
   shield2.addImage(img);
   shield2.scale = 0.4;
 
   shield3 = createSprite(coreX + armLength * cos(deg3), coreY + armLength * sin(deg3))
   shields.add(shield3)
-  shield3.setCollider('circle', 0, 0, 32)
-  shield3.shapeColor = "#00ff00"
+  shield3.setCollider('circle', 0, 0, 30)
+  // shield3.shapeColor = "#00ff00"
   shield3.addImage(img);
   shield3.scale = 0.4;
 }
@@ -203,8 +208,8 @@ function createProjectile(x, y) {
   let a = createSprite(x, y, 10, 10);
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
   // a.addImage(img);
-  // a.setSpeed(4.5, random(360))
-  a.setSpeed(2, random(360))
+  a.setSpeed(4.5, random(360))
+  // a.setSpeed(2, random(360))
   a.rotationSpeed = 0.5
   //a.debug = true;
   // a.scale = 0.2
@@ -228,7 +233,7 @@ function hitShield(projectile, shield) {
 function hitCore(projectile, myCore) {
   // console.log('corehit')
   projectile.remove()
-  health -= 5
+  health -= 10
   console.log(`hp: ${health} `)
 }
 
@@ -245,7 +250,8 @@ function windowResized() {
   let width = canvasDiv.offsetWidth
   let height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
-
+  // walls.remove()
+  // createWalls()
 }
 // Non p5.js code ~ domcontentloaded
 function init() {
@@ -298,4 +304,21 @@ window.addEventListener('load', init);
 //   fill(255, 0, 0)
 //   ellipseMode(CENTER)
 //   ellipse(coreX, coreY, 25, 25)
+// }
+
+
+// function wallBounce() {
+//   projectiles.bounce(walls);
+//   // projectiles.bounce(wallBottom);
+//   // projectiles.bounce(wallLeft);
+//   // projectiles.bounce(wallRight);
+// }
+
+// for (let i = 0; i < 4; i++) {
+//   `shield${i}` = createSprite(coreX + armLength * cos(`deg${i}`), coreY + armLength * sin(`deg${i}`))
+//   shields.add(`shield${0}`)
+//   `shield${i}`.setCollider('circle', 0, 0, 32)
+//   `shield${i}`.shapeColor = "#00ff00"
+//   `shield${i}`.addImage(img);
+//   `shield${i}`.scale = 0.4;
 // }
