@@ -26,12 +26,11 @@ let shields
 let projectiles
 // DOM STUFF
 
-
 function setup() {
   // put setup code here
   let canvasDiv = document.getElementById('canvasDiv')
   let width = canvasDiv.offsetWidth
-  let height = windowHeight - (windowHeight/5)
+  let height = windowHeight - (windowHeight / 5)
   background(10)
   var myCanvas = createCanvas(width, height);
   myCanvas.parent("canvasDiv")
@@ -50,8 +49,28 @@ function draw() {
   // put drawing code Here
   // Play Window
   background(10);
+  // update 'core'
+  updateCore()
+  // Draw 'core'
+  drawCore()
+  // Key Down - Rotate shields
+  updateShields()
+  // Draw shields
+  drawShields()
 
-  // Move 'core'
+  for (let i = 0; i < (diff * 5); i++) {
+    //create sprite
+    // set random direction
+  }
+}
+
+function drawCore() {
+  fill(255, 0, 0)
+  ellipseMode(CENTER)
+  ellipse(coreX, coreY, 25, 25)
+}
+
+function updateCore() {
   if (keyDown('w')) {
     coreY -= playerSpd
   }
@@ -64,13 +83,24 @@ function draw() {
   if (keyDown('d')) {
     coreX += playerSpd
   }
+}
 
-  // Draw 'core'
-  fill(255, 0, 0)
+function drawShield(deg) {
+  ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
+}
+
+function drawShields() {
+  // Adjust origin
+  translate(coreX, coreY);
   ellipseMode(CENTER)
-  ellipse(coreX, coreY, 25, 25)
+  fill(0, 255, 0)
+  drawShield(deg)
+  drawShield(deg2)
+  drawShield(deg3)
+  drawShield(deg4)
+}
 
-  // Key Down - Rotate shields
+function updateShields() {
   if (keyDown(LEFT_ARROW)) {
     deg -= rotateSpd
     deg2 -= rotateSpd
@@ -82,20 +112,6 @@ function draw() {
     deg2 += rotateSpd
     deg3 += rotateSpd
     deg4 += rotateSpd
-  }
-
-  // Adjust origin
-  translate(coreX, coreY);
-  // Draw shields
-  fill(0, 255, 0)
-  ellipse(50 * cos(deg), 50 * sin(deg), 20, 20)
-  ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
-  ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
-  ellipse(50 * cos(deg4), 50 * sin(deg4), 20, 20)
-
-  for (let i = 0; i < (diff * 5); i++) {
-    //create sprite
-    // set random direction
   }
 }
 
@@ -118,11 +134,11 @@ function gg() {
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
   let width = canvasDiv.offsetWidth
-  let height = windowHeight - (windowHeight/5)
+  let height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
 }
 // Non p5.js code --- >
-function init(){
+function init() {
 
 }
 
