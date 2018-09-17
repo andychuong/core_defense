@@ -112,16 +112,24 @@ function wallBounce(){
 
 function updateCore() {
   if (keyDown('w')) {
-    coreY -= playerSpd
+    if(coreY > armLength + shieldSize/2){
+      coreY -= playerSpd
+    }
   }
   if (keyDown('s')) {
-    coreY += playerSpd
+    if(coreY < height - armLength - shieldSize/2){
+      coreY += playerSpd
+    }
   }
   if (keyDown('a')) {
-    coreX -= playerSpd
+    if(coreX > armLength + shieldSize/2 ){
+      coreX -= playerSpd * 1.2
+    }
   }
   if (keyDown('d')) {
-    coreX += playerSpd
+    if(coreX < width - armLength - shieldSize/2){
+      coreX += playerSpd * 1.2
+    }
   }
   myCore.position.x = constrain(coreX,0+armLength, width - armLength)
   myCore.position.y = constrain(coreY,0-armLength, height - armLength)
