@@ -25,7 +25,7 @@ Shield Rotations
 * Right Arrow: Rotate shields right
 
 ## Planning
-[https://trello.com/b/GmAUbxzj/q1-project]
+https://trello.com/b/GmAUbxzj/q1-project
 
 ### Technology
 * HTML, CSS, JavaScript
