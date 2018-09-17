@@ -7,12 +7,14 @@ let deg = Math.PI
 let deg2 = Math.PI/2
 let deg3 = -Math.PI/2
 let deg4 = 2*Math.PI
+let diff
 
 function setup() {
   // put setup code here
   createCanvas(windowWidth -5, windowHeight-5);
   midX = windowWidth/2
   midY = windowHeight/2
+  let diff = 1
 }
 
 function draw() {
@@ -21,7 +23,7 @@ function draw() {
     fill(10)
     rect(100,100, windowWidth - 200, windowHeight - 200);
 
-    // Draw player 
+    // Draw player
     fill(255,0,0)
     ellipseMode(CENTER)
     ellipse(midX, midY, 25, 25)
@@ -35,6 +37,11 @@ function draw() {
     ellipse(50 * cos(deg2), 50 * sin(deg2), 20, 20)
     ellipse(50 * cos(deg3), 50 * sin(deg3), 20, 20)
     ellipse(50 * cos(deg4), 50 * sin(deg4), 20, 20)
+
+    for(let i = 0; i < (diff * 5);i++){
+        //create sprite
+        // set random direction 
+    }
 
 }
 
