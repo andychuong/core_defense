@@ -66,16 +66,16 @@ function setup() {
   projectiles = new Group()
   walls = new Group()
   // Reset Globals
-  score = 0
   health = 100
-  blocked = 0
-  missed = 0
+
   // Border walls
   createWalls()
   // Create core
-  createCore()
-  // Create Shields
-  createShields()
+  // if(diff === 1){
+    createCore()
+    // Create Shields
+    createShields()
+  // }
   // Create projectiles
   createProjectiles(diff)
 }
@@ -86,6 +86,10 @@ function draw() {
   drawSprites(walls)
   switch(gameStage){
     case 0: // Title Screen
+      // Resets
+      score = 0
+      blocked = 0
+      missed = 0
       // Objectives
 
       // Controls
@@ -102,6 +106,7 @@ function draw() {
       }
       break
     case 1: // Game Play
+      console.log("case1 " + diff)
       moveCore()                // Update Core's x, y
       rotateShields()           // Update Shields' rotations
       projectiles.bounce(walls) // Bounds check
@@ -112,13 +117,27 @@ function draw() {
       break
     case 2: // Between Levels
       // Level Complete Notification
-
+      fill('white')
+      text(`Level ${diff -1} Complete!`, width/2,height/2 - 30)
       // Score
 
       // Continue
+      console.log("case2 " + diff)
+      myCore.remove()
+
+      for(let i = 0; i < shields.length; i++){
+        shields[i].remove()
+      }
+      if (keyDown('space')) {
+        gameStage--
+        setup()
+      }
+
       break
     case 3: // Game Over: Summary
       // Game Over Notification
+      fill('white')
+      text(`Game Over`, width/2,height/2 - 30)
 
       // Score
 
@@ -127,6 +146,17 @@ function draw() {
       // Missed
 
       // Main Menu
+      myCore.remove()
+
+      for(let i = 0; i < shields.length; i++){
+        shields[i].remove()
+      }
+      // NEED TO FIX WEIRD THING WHERE SPACE IS HELD DOWN !!@#!@#
+      if (keyDown('space')) {
+        gameStage = 0
+        setup()
+      }
+
       break
   }
 }
@@ -262,13 +292,14 @@ function rotateShields() {
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
 
+// NEED TO FIX SPAWNING ONTOP OF CORE
 function createProjectiles(diff) {
-  console.log(width+','+height)
-  for (let i = 0; i < (diff * 8); i++) {
+  // console.log(width+','+height)
+  for (let i = 0; i < 8 + (diff * 5); i++) {
     // set random direction
     let px = random(wallThickness * 2,width - wallThickness*2)
     let py = random(wallThickness *2 ,height - wallThickness*2)
-    console.log(px + ',' + py)
+    // console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
   }
@@ -279,22 +310,26 @@ function createProjectile(x, y) {
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
   // a.addImage(img);
   a.setSpeed(4.5, random(360))
-  // a.setSpeed(2, random(360))
   a.rotationSpeed = 0.5
-  //a.debug = true;
-  // a.scale = 0.2
   a.shapeColor = "#ff2222"
   a.setCollider('circle', 0, 0, 10)
   projectiles.add(a)
   return a;
 }
 
+function levelOver(){
+  if (projectiles.length === 0) {
+    gameStage++
+    diff++
+    health = 100
+  }
+  if (domLoaded && gameStage !== 0) {
+    healthDiv.innerText = `hp: ${health} `
+  }
+}
+
 function hitShield(projectile, shield) {
-  // health -= 10;
-  // if (health === 0) {
-  //   gg()
-  // }
-  // console.log('hit')
+
   projectile.remove();
   score += diff
   blocked++
@@ -302,12 +337,7 @@ function hitShield(projectile, shield) {
   if (domLoaded && gameStage !== 0) {
     scoreDiv.innerText = `score: ${score}`
   }
-  if (projectiles.length === 0) {
-    // alert('win?')
-    gameStage++
-    // console.log(gameStage)
-  }
-  console.log(projectiles.length)
+  levelOver()
 }
 
 function hitCore(projectile, myCore) {
@@ -316,22 +346,15 @@ function hitCore(projectile, myCore) {
   health -= 10
   missed ++
   console.log(`hp: ${health} `)
-  if (domLoaded && gameStage !== 0) {
-    healthDiv.innerText = `hp: ${health} `
-  }
   if (health === 0){
     // alert('game over?!?!?!')
+    gameStage = 3
   }
-  if (projectiles.length === 0) {
-    // alert('win?')
-    gameStage++
-    // console.log(gameStage)
-  }
-  console.log(projectiles.length)
+  levelOver()
 }
 
 function getHp() {
-  health += 10
+  // health += 10
 }
 
 function gg() {
