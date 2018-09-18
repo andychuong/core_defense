@@ -44,6 +44,7 @@ let wallThickness = 30;
 let domLoaded = false
 let healthDiv
 let scoreDiv
+var button
 
 
 function setup() {
@@ -82,6 +83,7 @@ function setup() {
 function draw() {
   // Reset Background before drawing
   background(10);
+  drawSprites(walls)
   switch(gameStage){
     case 0: // Title Screen
       // Objectives
@@ -89,6 +91,15 @@ function draw() {
       // Controls
 
       // Start
+      ellipseMode(CENTER)
+      ellipse(coreX, coreY, 200, 200)
+      textSize(20)
+      textAlign(CENTER)
+      text('START', coreX, coreY)
+      text(`(or press space)`, coreX , coreY + 20)
+      if (keyDown('space')) {
+        changegameStage()
+      }
       break
     case 1: // Game Play
       moveCore()                // Update Core's x, y
@@ -97,7 +108,7 @@ function draw() {
       // Collision
       projectiles.overlap(shields, hitShield)
       projectiles.overlap(myCore, hitCore)
-      drawSprites(); // Draw all Sprites
+      drawSprites() // Draw all Sprites
       break
     case 2: // Between Levels
       // Level Complete Notification
@@ -119,27 +130,45 @@ function draw() {
       break
   }
 }
+function mousePressed() {
+  // Check if mouse is inside the circle
+  var d = dist(mouseX, mouseY, coreX, coreY);
+  if (d < 100) {
+    changegameStage()
+  }
+}
+
+function changegameStage(){
+
+  if (gameStage !== 3) {
+    gameStage ++
+  } else {
+    gameStage = 0
+    setup()
+  }
+  init()
+}
 
 function createWalls() {
   wallTop = createSprite(width / 2, -wallThickness / 2 + 5, width + wallThickness * 2, wallThickness);
   wallTop.immovable = true;
   walls.add(wallTop)
-  wallTop.shapeColor = "#ffffff"
+  wallTop.shapeColor = "#dddddd"
 
   wallBottom = createSprite(width / 2, height + wallThickness / 2 - 5, width + wallThickness * 2, wallThickness);
   wallBottom.immovable = true;
   walls.add(wallBottom)
-  wallBottom.shapeColor = "#ffffff"
+  wallBottom.shapeColor = "#dddddd"
 
   wallLeft = createSprite(-wallThickness / 2 + 5, height / 2, wallThickness, height);
   wallLeft.immovable = true;
   walls.add(wallLeft)
-  wallLeft.shapeColor = "#ffffff"
+  wallLeft.shapeColor = "#dddddd"
 
   wallRight = createSprite(width + wallThickness / 2 - 5, height / 2, wallThickness, height);
   wallRight.immovable = true;
   walls.add(wallRight)
-  wallRight.shapeColor = "#ffffff"
+  wallRight.shapeColor = "#dddddd"
 }
 
 function createCore() {
@@ -234,10 +263,12 @@ function rotateShields() {
 }
 
 function createProjectiles(diff) {
+  console.log(width+','+height)
   for (let i = 0; i < (diff * 8); i++) {
     // set random direction
-    let px = width * random()
-    let py = height * random()
+    let px = random(wallThickness * 2,width - wallThickness*2)
+    let py = random(wallThickness *2 ,height - wallThickness*2)
+    console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
   }
@@ -276,6 +307,7 @@ function hitShield(projectile, shield) {
     gameStage++
     // console.log(gameStage)
   }
+  console.log(projectiles.length)
 }
 
 function hitCore(projectile, myCore) {
@@ -295,6 +327,7 @@ function hitCore(projectile, myCore) {
     gameStage++
     // console.log(gameStage)
   }
+  console.log(projectiles.length)
 }
 
 function getHp() {
@@ -389,3 +422,8 @@ window.addEventListener('load', init);
 //   `shield${i}`.addImage(img);
 //   `shield${i}`.scale = 0.4;
 // }
+
+//
+// let button = createButton('submit');
+// button.position(coreX + coreY, 65);
+// button.mousePressed(changegameStage);
