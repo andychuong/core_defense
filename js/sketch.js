@@ -3,16 +3,20 @@ let score = 0
 /* Program state: 0, 1, 2
     0 - Intro Screen
     1 - Actual Gameplay
-    2 - Game Over / Performance Overview
+    2 - Between Levels
+    3 - Game Over / Performance Overview
 */
-let gameStage = 0
+let gameStage = 1
 // Current health: starts at 100
 let health = 100
+// Blocked and Missed
+let blocked
+let missed
 // Coordinates for core / player
 let coreX
 let coreY
 // Speed Controls
-const rotateSpd = .06
+const rotateSpd = .05
 const playerSpd = 2
 // Set up core and shields
 const coreSize = 40
@@ -29,7 +33,7 @@ let deg1 = 2 * Math.PI
 let deg2 = Math.PI / 2
 let deg3 = -Math.PI / 2
 // Difficulty
-let diff
+let diff = 1
 // Collision Groups
 let shields
 let projectiles
@@ -55,11 +59,16 @@ function setup() {
   coreX = width / 2
   coreY = height / 2
   // Difficulty and spawns (spawns = 5 * diff)
-  diff = 5
+  // diff = 5
   // Collision groups
   shields = new Group()
   projectiles = new Group()
   walls = new Group()
+  // Reset Globals
+  score = 0
+  health = 100
+  blocked = 0
+  missed = 0
   // Border walls
   createWalls()
   // Create core
@@ -73,17 +82,42 @@ function setup() {
 function draw() {
   // Reset Background before drawing
   background(10);
-  // Update Core's x, y
-  moveCore()
-  // Update Shields' rotations
-  rotateShields()
-  // Bounds check
-  projectiles.bounce(walls)
-  // Collision
-  projectiles.overlap(shields, hitShield)
-  projectiles.overlap(myCore, hitCore)
-  // Draw all Sprites
-  drawSprites();
+  switch(gameStage){
+    case 0: // Title Screen
+      // Objectives
+
+      // Controls
+
+      // Start
+      break
+    case 1: // Game Play
+      moveCore()                // Update Core's x, y
+      rotateShields()           // Update Shields' rotations
+      projectiles.bounce(walls) // Bounds check
+      // Collision
+      projectiles.overlap(shields, hitShield)
+      projectiles.overlap(myCore, hitCore)
+      drawSprites(); // Draw all Sprites
+      break
+    case 2: // Between Levels
+      // Level Complete Notification
+
+      // Score
+
+      // Continue
+      break
+    case 3: // Game Over: Summary
+      // Game Over Notification
+
+      // Score
+
+      // Blocked
+
+      // Missed
+
+      // Main Menu
+      break
+  }
 }
 
 function createWalls() {
@@ -232,9 +266,15 @@ function hitShield(projectile, shield) {
   // console.log('hit')
   projectile.remove();
   score += diff
+  blocked++
   console.log(`score: ${score}`)
-  if (domLoaded) {
+  if (domLoaded && gameStage !== 0) {
     scoreDiv.innerText = `score: ${score}`
+  }
+  if (projectiles.length === 0) {
+    // alert('win?')
+    gameStage++
+    // console.log(gameStage)
   }
 }
 
@@ -242,9 +282,18 @@ function hitCore(projectile, myCore) {
   // console.log('corehit')
   projectile.remove()
   health -= 10
+  missed ++
   console.log(`hp: ${health} `)
-  if (domLoaded) {
+  if (domLoaded && gameStage !== 0) {
     healthDiv.innerText = `hp: ${health} `
+  }
+  if (health === 0){
+    // alert('game over?!?!?!')
+  }
+  if (projectiles.length === 0) {
+    // alert('win?')
+    gameStage++
+    // console.log(gameStage)
   }
 }
 
@@ -271,8 +320,10 @@ function init() {
   healthDiv = document.getElementById('health')
   scoreDiv = document.getElementById('score')
   domLoaded = true
-  scoreDiv.innerText = `score: ${score}`
-  healthDiv.innerText = `hp: ${health} `
+  if(gameStage !== 0){
+    scoreDiv.innerText = `score: ${score}`
+    healthDiv.innerText = `hp: ${health} `
+  }
 }
 
 window.addEventListener('load', init);
