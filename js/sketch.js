@@ -10,11 +10,9 @@ let gameStage = 1
 // Current health: starts at 100
 let health = 100
 // Blocked and Missed
-let blocked
-let missed
+let blocked, missed
 // Coordinates for core / player
-let coreX
-let coreY
+let coreX, coreY
 // Speed Controls
 const rotateSpd = .05
 const playerSpd = 2
@@ -23,10 +21,7 @@ const coreSize = 40
 let myCore
 const armLength = 80
 const shieldSize = 15
-let shield0
-let shield1
-let shield2
-let shield3
+let shield0, shield1, shield2, shield3
 // Initial Shield Rotations
 let deg0 = Math.PI
 let deg1 = 2 * Math.PI
@@ -35,17 +30,12 @@ let deg3 = -Math.PI / 2
 // Difficulty
 let diff = 1
 // Collision Groups
-let shields
-let projectiles
-let walls
+let shields, projectiles, walls
 // Border wall thickness
 let wallThickness = 30;
 // DOM Stuff
 let domLoaded = false
-let healthDiv
-let scoreDiv
-var button
-
+let healthDiv, scoreDiv
 
 function setup() {
   // Create canvas and add to dom ---------------------
@@ -55,27 +45,21 @@ function setup() {
   background(10)
   var myCanvas = createCanvas(width, height);
   myCanvas.parent("canvasDiv")
+
   // Set Global Initial Values ------------------------
   // Core Coordinates
   coreX = width / 2
   coreY = height / 2
-  // Difficulty and spawns (spawns = 5 * diff)
-  // diff = 5
   // Collision groups
   shields = new Group()
   projectiles = new Group()
   walls = new Group()
-  // Reset Globals
-  health = 100
-
   // Border walls
   createWalls()
   // Create core
-  // if(diff === 1){
-    createCore()
-    // Create Shields
-    createShields()
-  // }
+  createCore()
+  // Create Shields
+  createShields()
   // Create projectiles
   createProjectiles(diff)
 }
@@ -84,7 +68,7 @@ function draw() {
   // Reset Background before drawing
   background(10);
   drawSprites(walls)
-  switch(gameStage){
+  switch (gameStage) {
     case 0: // Title Screen
       // Resets
       score = 0
@@ -100,15 +84,14 @@ function draw() {
       textSize(20)
       textAlign(CENTER)
       text('START', coreX, coreY)
-      text(`(or press space)`, coreX , coreY + 20)
+      text(`(or press space)`, coreX, coreY + 20)
       if (keyDown('space')) {
         changegameStage()
       }
       break
     case 1: // Game Play
-      console.log("case1 " + diff)
-      moveCore()                // Update Core's x, y
-      rotateShields()           // Update Shields' rotations
+      moveCore() // Update Core's x, y
+      rotateShields() // Update Shields' rotations
       projectiles.bounce(walls) // Bounds check
       // Collision
       projectiles.overlap(shields, hitShield)
@@ -118,14 +101,13 @@ function draw() {
     case 2: // Between Levels
       // Level Complete Notification
       fill('white')
-      text(`Level ${diff -1} Complete!`, width/2,height/2 - 30)
+      text(`Level ${diff -1} Complete!`, width / 2, height / 2 - 30)
       // Score
 
       // Continue
-      console.log("case2 " + diff)
       myCore.remove()
 
-      for(let i = 0; i < shields.length; i++){
+      for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
       if (keyDown('space')) {
@@ -137,7 +119,7 @@ function draw() {
     case 3: // Game Over: Summary
       // Game Over Notification
       fill('white')
-      text(`Game Over`, width/2,height/2 - 30)
+      text(`Game Over`, width / 2, height / 2 - 30)
 
       // Score
 
@@ -148,7 +130,7 @@ function draw() {
       // Main Menu
       myCore.remove()
 
-      for(let i = 0; i < shields.length; i++){
+      for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
       // NEED TO FIX WEIRD THING WHERE SPACE IS HELD DOWN !!@#!@#
@@ -160,6 +142,8 @@ function draw() {
       break
   }
 }
+
+// NEEDS WORK
 function mousePressed() {
   // Check if mouse is inside the circle
   var d = dist(mouseX, mouseY, coreX, coreY);
@@ -167,11 +151,11 @@ function mousePressed() {
     changegameStage()
   }
 }
-
-function changegameStage(){
+// REFACTOR THIS LATER/DELETE?
+function changegameStage() {
 
   if (gameStage !== 3) {
-    gameStage ++
+    gameStage++
   } else {
     gameStage = 0
     setup()
@@ -297,8 +281,8 @@ function createProjectiles(diff) {
   // console.log(width+','+height)
   for (let i = 0; i < 8 + (diff * 5); i++) {
     // set random direction
-    let px = random(wallThickness * 2,width - wallThickness*2)
-    let py = random(wallThickness *2 ,height - wallThickness*2)
+    let px = random(wallThickness * 2, width - wallThickness * 2)
+    let py = random(wallThickness * 2, height - wallThickness * 2)
     // console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
@@ -317,7 +301,7 @@ function createProjectile(x, y) {
   return a;
 }
 
-function levelOver(){
+function levelOver() {
   if (projectiles.length === 0) {
     gameStage++
     diff++
@@ -344,9 +328,9 @@ function hitCore(projectile, myCore) {
   // console.log('corehit')
   projectile.remove()
   health -= 10
-  missed ++
+  missed++
   console.log(`hp: ${health} `)
-  if (health === 0){
+  if (health === 0) {
     // alert('game over?!?!?!')
     gameStage = 3
   }
@@ -355,10 +339,6 @@ function hitCore(projectile, myCore) {
 
 function getHp() {
   // health += 10
-}
-
-function gg() {
-  gameStage = 2
 }
 
 function windowResized() {
@@ -376,7 +356,7 @@ function init() {
   healthDiv = document.getElementById('health')
   scoreDiv = document.getElementById('score')
   domLoaded = true
-  if(gameStage !== 0){
+  if (gameStage !== 0) {
     scoreDiv.innerText = `score: ${score}`
     healthDiv.innerText = `hp: ${health} `
   }
