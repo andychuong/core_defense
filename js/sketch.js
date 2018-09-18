@@ -15,13 +15,11 @@ let blocked, missed
 let coreX, coreY
 // Speed Controls
 const rotateSpd = .05
-const playerSpd = 2
+const playerSpd = 2.5
 // Set up core and shields
-const coreSize = 40
-let myCore
 const armLength = 80
 const shieldSize = 15
-let shield0, shield1, shield2, shield3
+let myCore, shield0, shield1, shield2, shield3
 // Initial Shield Rotations
 let deg0 = Math.PI
 let deg1 = 2 * Math.PI
@@ -129,7 +127,7 @@ function draw() {
 
       // Main Menu
       myCore.remove()
-
+      health = 100
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
@@ -138,7 +136,6 @@ function draw() {
         gameStage = 0
         setup()
       }
-
       break
   }
 }
@@ -332,6 +329,7 @@ function hitCore(projectile, myCore) {
   console.log(`hp: ${health} `)
   if (health === 0) {
     // alert('game over?!?!?!')
+    health === 100
     gameStage = 3
   }
   levelOver()
