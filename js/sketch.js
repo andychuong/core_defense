@@ -128,6 +128,7 @@ function draw() {
       // Main Menu
       myCore.remove()
       health = 100
+      diff = 1
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
