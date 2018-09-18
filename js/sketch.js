@@ -17,7 +17,7 @@ const playerSpd = 2
 // Set up core and shields
 const coreSize = 40
 let myCore
-const armLength = 70
+const armLength = 80
 const shieldSize = 15
 let shield0
 let shield1
@@ -36,6 +36,11 @@ let projectiles
 let walls
 // Border wall thickness
 let wallThickness = 30;
+// DOM Stuff
+let domLoaded = false
+let healthDiv
+let scoreDiv
+
 
 function setup() {
   // Create canvas and add to dom ---------------------
@@ -228,6 +233,9 @@ function hitShield(projectile, shield) {
   projectile.remove();
   score += diff
   console.log(`score: ${score}`)
+  if (domLoaded) {
+    scoreDiv.innerText = `score: ${score}`
+  }
 }
 
 function hitCore(projectile, myCore) {
@@ -235,6 +243,9 @@ function hitCore(projectile, myCore) {
   projectile.remove()
   health -= 10
   console.log(`hp: ${health} `)
+  if (domLoaded) {
+    healthDiv.innerText = `hp: ${health} `
+  }
 }
 
 function getHp() {
@@ -257,6 +268,11 @@ function windowResized() {
 function init() {
   // DOM
   document.getElementById("mainHeader").innerText = 'Core Defense'
+  healthDiv = document.getElementById('health')
+  scoreDiv = document.getElementById('score')
+  domLoaded = true
+  scoreDiv.innerText = `score: ${score}`
+  healthDiv.innerText = `hp: ${health} `
 }
 
 window.addEventListener('load', init);
