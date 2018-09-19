@@ -77,20 +77,25 @@ function draw() {
       // Controls
 
       // Start
-      ellipseMode(CENTER)
-      ellipse(coreX, coreY, 200, 200)
+      // ellipseMode(CENTER)
+      // ellipse(coreX, coreY, 200, 200)
       textSize(20)
       textAlign(CENTER)
-      text('START', coreX, coreY)
-      text(`(or press space)`, coreX, coreY + 20)
-      textAlign(LEFT)
+      // text('Press Space to Start', coreX, coreY)
+      // text(`(or press space)`, coreX, coreY + 20)
       fill('white')
+      text('Press Space to Start', coreX, coreY)
+      textAlign(LEFT)
+
+
       text(`W: ↑ Move core up`, coreX -130, 50)
       text(`S: ↓ Move player down`, coreX -130, 80)
       text(`A: ← Move player left`, coreX -130, 110)
       text(`D: → Move player right`, coreX -130, 140)
-      text(`Left Arrow: ↺ Rotate shields left`, coreX -130, 170)
-      text(`Right Arrow: ↻ Rotate shields right`, coreX -130, 200)
+      text(`Left Arrow: ⤺ Rotate shields left`, coreX -130, 170)
+      text(`Right Arrow: ⤻ Rotate shields right`, coreX -130, 200)
+      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX -130, 230)
+      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX -130, 260)
 
       if (keyDown('space')) {
         changegameStage()
