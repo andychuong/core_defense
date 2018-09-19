@@ -17,7 +17,7 @@ let coreX, coreY
 const rotateSpd = .05
 const playerSpd = 2.5
 // Set up core and shields
-const armLength = 80
+let armLength = 80
 const shieldSize = 15
 let myCore, shield0, shield1, shield2, shield3
 // Initial Shield Rotations
@@ -277,6 +277,16 @@ function rotateShields() {
     deg2 += rotateSpd
     deg3 += rotateSpd
   }
+  if(keyDown(UP_ARROW)) {
+    if(armLength < 120){
+      armLength += 5
+    }
+  }
+  if(keyDown(DOWN_ARROW)) {
+    if(armLength > 60){
+      armLength -= 5
+    }
+  }
   shield0.position.x = (coreX + armLength * cos(deg0))
   shield0.position.y = (coreY + armLength * sin(deg0))
 
@@ -289,7 +299,7 @@ function rotateShields() {
   shield3.position.x = (coreX + armLength * cos(deg3))
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
-// NEED TO FIX SPAWNING ONTOP OF CORE
+
 function createProjectiles(diff) {
   // console.log(width+','+height)
   for (let i = 0; i < 8 + (diff * 5); i++) {
@@ -362,7 +372,7 @@ function hitCore(projectile, myCore) {
   if (health === 0) {
     // alert('game over?!?!?!')
     health === 100
-    // gameStage = 3
+    gameStage = 3
   }
   levelOver()
 }
