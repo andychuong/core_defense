@@ -142,9 +142,9 @@ function draw() {
       // text('Press Space to Start', coreX, coreY)
       // text(`(or press space)`, coreX, coreY + 20)
       fill('white')
-      text('Game Over ☹', width / 2 + 10, height  / 2)
+      text('Game Over ☹', width / 2 + 10, height / 2)
       textSize(20)
-      text('Press space to restart!', width / 2, height  / 2 + 30)
+      text('Press space to restart!', width / 2, height / 2 + 30)
       // Score
 
       // Blocked

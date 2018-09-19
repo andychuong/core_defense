@@ -23,6 +23,8 @@ Player Movement
 Shield Rotations
 * Left Arrow: ↺ Rotate shields left
 * Right Arrow: ↻ Rotate shields right
+* Up Arrow: ⤎ ⤏ Move shields away from core
+* Down Arrow: ⤏ ⤎ Move shields towards core
 
 ## Planning
 https://trello.com/b/GmAUbxzj/q1-project
