@@ -38,7 +38,7 @@ let healthDiv, scoreDiv
 function setup() {
   // Create canvas and add to dom ---------------------
   let canvasDiv = document.getElementById('canvasDiv')
-  var width = windowWidth - (windowWidth/5)
+  var width = windowWidth - (windowWidth / 5)
   var height = windowHeight - (windowHeight / 5)
   background(10)
   var myCanvas = createCanvas(width, height);
@@ -87,15 +87,14 @@ function draw() {
       text('Press Space to Start', coreX, coreY)
       textAlign(LEFT)
 
-
-      text(`W: ↑ Move core up`, coreX -130, 50)
-      text(`S: ↓ Move player down`, coreX -130, 80)
-      text(`A: ← Move player left`, coreX -130, 110)
-      text(`D: → Move player right`, coreX -130, 140)
-      text(`Left Arrow: ⤺ Rotate shields left`, coreX -130, 170)
-      text(`Right Arrow: ⤻ Rotate shields right`, coreX -130, 200)
-      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX -130, 230)
-      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX -130, 260)
+      text(`W: ↑ Move core up`, coreX - 130, 50)
+      text(`S: ↓ Move player down`, coreX - 130, 80)
+      text(`A: ← Move player left`, coreX - 130, 110)
+      text(`D: → Move player right`, coreX - 130, 140)
+      text(`Left Arrow: ⤺ Rotate shields left`, coreX - 130, 170)
+      text(`Right Arrow: ⤻ Rotate shields right`, coreX - 130, 200)
+      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX - 130, 230)
+      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX - 130, 260)
 
       if (keyDown('space')) {
         changegameStage()
@@ -104,8 +103,8 @@ function draw() {
     case 1: // Game Play
       textSize(20)
       textAlign(CENTER)
-      fill(255,255,255)
-      text(`Level ${diff}`, width/2, 30)
+      fill(255, 255, 255)
+      text(`Level ${diff}`, width / 2, 30)
       moveCore() // Update Core's x, y
       rotateShields() // Update Shields' rotations
       projectiles.bounce(walls) // Bounds check
@@ -138,9 +137,14 @@ function draw() {
       break
     case 3: // Game Over: Summary
       // Game Over Notification
+      textSize(50)
+      textAlign(CENTER)
+      // text('Press Space to Start', coreX, coreY)
+      // text(`(or press space)`, coreX, coreY + 20)
       fill('white')
-      text(`Game Over`, width / 2, height / 2 + 30)
-
+      text('Game Over ☹', width / 2 + 10, height  / 2)
+      textSize(20)
+      text('Press space to restart!', width / 2, height  / 2 + 30)
       // Score
 
       // Blocked
@@ -162,7 +166,7 @@ function draw() {
       break
   }
 }
-// NEEDS WORK
+
 function mousePressed() {
   // Check if mouse is inside the circle
   var d = dist(mouseX, mouseY, coreX, coreY);
@@ -170,7 +174,7 @@ function mousePressed() {
     changegameStage()
   }
 }
-// REFACTOR THIS LATER/DELETE?
+
 function changegameStage() {
 
   if (gameStage !== 3) {
@@ -282,13 +286,13 @@ function rotateShields() {
     deg2 += rotateSpd
     deg3 += rotateSpd
   }
-  if(keyDown(UP_ARROW)) {
-    if(armLength < 120){
+  if (keyDown(UP_ARROW)) {
+    if (armLength < 120) {
       armLength += 5
     }
   }
-  if(keyDown(DOWN_ARROW)) {
-    if(armLength > 60){
+  if (keyDown(DOWN_ARROW)) {
+    if (armLength > 60) {
       armLength -= 5
     }
   }
@@ -311,7 +315,7 @@ function createProjectiles(diff) {
     // set random direction
     let px = random(wallThickness, width - wallThickness)
     let py = random(wallThickness, height - wallThickness)
-    while(dist(coreX, coreY, px, py) < armLength * 2.5){
+    while (dist(coreX, coreY, px, py) < armLength * 2.5) {
       px = random(wallThickness, width - wallThickness)
       py = random(wallThickness, height - wallThickness)
     }
@@ -333,15 +337,15 @@ function createProjectile(px, py) {
   return a;
 }
 
-function checkProjectiles(){
+function checkProjectiles() {
   for (var i = 0; i < projectiles.length; i++) {
     let proj = projectiles[i]
-    if(proj.position.x < 0 || proj.position.x > width) {
-      projectiles.splice(i,1)
+    if (proj.position.x < 0 || proj.position.x > width) {
+      projectiles.splice(i, 1)
     }
     // check this more
-    if(proj.position.y < 0 || proj.position.y > height){
-      projectiles.splice(i,1)
+    if (proj.position.y < 0 || proj.position.y > height) {
+      projectiles.splice(i, 1)
     }
   }
 }
@@ -388,12 +392,12 @@ function getHp() {
 
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
-  width = windowWidth - (windowWidth/5)
+  width = windowWidth - (windowWidth / 5)
   height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
-  if(gameStage !== 1){
+  if (gameStage !== 1) {
     walls[i].remove()
-    walls.splice(0,4)
+    walls.splice(0, 4)
     createWalls()
   }
   // walls.remove()
