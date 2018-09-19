@@ -207,7 +207,7 @@ function createWalls() {
   walls.add(wallRight)
   wallRight.shapeColor = "#dddddd"
 }
-
+// CORE
 function createCore() {
   let img = loadImage('img/core1.png');
   myCore = createSprite(coreX, coreY)
@@ -240,7 +240,7 @@ function moveCore() {
   myCore.position.x = constrain(coreX, 0 + armLength, width - armLength)
   myCore.position.y = constrain(coreY, 0 - armLength, height - armLength)
 }
-
+// SHIELDS
 function createShields() {
   let img = loadImage('img/shield1.png');
 
@@ -308,7 +308,7 @@ function rotateShields() {
   shield3.position.x = (coreX + armLength * cos(deg3))
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
-
+// PROJECTILES
 function createProjectiles(diff) {
   // console.log(width+','+height)
   for (let i = 0; i < 8 + (diff * 5); i++) {
@@ -327,8 +327,8 @@ function createProjectiles(diff) {
 
 function createProjectile(px, py) {
   let a = createSprite(px, py, 10, 10);
-  // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
-  // a.addImage(img);
+  let img = loadImage('img/projectiles.png');
+  a.addImage(img);
   a.setSpeed(4.5, random(360))
   a.rotationSpeed = 0.5
   a.shapeColor = "#ff2222"
@@ -349,7 +349,7 @@ function checkProjectiles() {
     }
   }
 }
-
+// GAME MECHANICS
 function levelOver() {
   if (projectiles.length === 0) {
     gameStage++
@@ -389,7 +389,7 @@ function hitCore(projectile, myCore) {
 function getHp() {
   // health += 10
 }
-
+// NON-P5.JS CODE
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
   width = windowWidth - (windowWidth / 5)
