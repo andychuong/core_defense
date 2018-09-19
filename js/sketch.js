@@ -296,6 +296,10 @@ function createProjectiles(diff) {
     // set random direction
     let px = random(wallThickness, width - wallThickness)
     let py = random(wallThickness, height - wallThickness)
+    while(dist(coreX, coreY, px, py) < armLength * 2.5){
+      px = random(wallThickness, width - wallThickness)
+      py = random(wallThickness, height - wallThickness)
+    }
     // console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
@@ -318,10 +322,11 @@ function checkProjectiles(){
   for (var i = 0; i < projectiles.length; i++) {
     let proj = projectiles[i]
     if(proj.position.x < 0 || proj.position.x > width) {
-      projectiles[i].remove()
+      projectiles.splice(i,1)
     }
+    // check this more
     if(proj.position.y < 0 || proj.position.y > height){
-      projectiles[i].remove()
+      projectiles.splice(i,1)
     }
   }
 }
@@ -357,7 +362,7 @@ function hitCore(projectile, myCore) {
   if (health === 0) {
     // alert('game over?!?!?!')
     health === 100
-    gameStage = 3
+    // gameStage = 3
   }
   levelOver()
 }
@@ -372,9 +377,8 @@ function windowResized() {
   height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
   if(gameStage !== 1){
-    for (let i = 0; i < walls.length; i++) {
-      walls[i].remove()
-    }
+    walls[i].remove()
+    walls.splice(0,4)
     createWalls()
   }
   // walls.remove()
