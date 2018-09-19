@@ -6,7 +6,7 @@ let score = 0
     2 - Between Levels
     3 - Game Over / Performance Overview
 */
-let gameStage = 1
+let gameStage = 0
 // Current health: starts at 100
 let health = 100
 // Blocked and Missed
@@ -26,7 +26,7 @@ let deg1 = 2 * Math.PI
 let deg2 = Math.PI / 2
 let deg3 = -Math.PI / 2
 // Difficulty
-let diff = 1
+let diff = 10
 // Collision Groups
 let shields, projectiles, walls
 // Border wall thickness
@@ -38,7 +38,7 @@ let healthDiv, scoreDiv
 function setup() {
   // Create canvas and add to dom ---------------------
   let canvasDiv = document.getElementById('canvasDiv')
-  var width = canvasDiv.offsetWidth
+  var width = windowWidth - (windowWidth/5)
   var height = windowHeight - (windowHeight / 5)
   background(10)
   var myCanvas = createCanvas(width, height);
@@ -83,23 +83,40 @@ function draw() {
       textAlign(CENTER)
       text('START', coreX, coreY)
       text(`(or press space)`, coreX, coreY + 20)
+      textAlign(LEFT)
+      fill('white')
+      text(`W: ↑ Move core up`, coreX -130, 50)
+      text(`S: ↓ Move player down`, coreX -130, 80)
+      text(`A: ← Move player left`, coreX -130, 110)
+      text(`D: → Move player right`, coreX -130, 140)
+      text(`Left Arrow: ↺ Rotate shields left`, coreX -130, 170)
+      text(`Right Arrow: ↻ Rotate shields right`, coreX -130, 200)
+
       if (keyDown('space')) {
         changegameStage()
       }
       break
     case 1: // Game Play
+      textSize(20)
+      textAlign(CENTER)
+      fill(255,255,255)
+      text(`Level ${diff}`, width/2, 30)
       moveCore() // Update Core's x, y
       rotateShields() // Update Shields' rotations
       projectiles.bounce(walls) // Bounds check
       // Collision
       projectiles.overlap(shields, hitShield)
       projectiles.overlap(myCore, hitCore)
+      checkProjectiles()
       drawSprites() // Draw all Sprites
       break
     case 2: // Between Levels
       // Level Complete Notification
       fill('white')
-      text(`Level ${diff -1} Complete!`, width / 2, height / 2 - 30)
+      textSize(40)
+      textAlign(CENTER)
+      text(`Level ${diff -1} Complete!`, width / 2, height / 2 + 10)
+      text(`Press space to continue`, width / 2, height / 2 + 60)
       // Score
 
       // Continue
@@ -117,7 +134,7 @@ function draw() {
     case 3: // Game Over: Summary
       // Game Over Notification
       fill('white')
-      text(`Game Over`, width / 2, height / 2 - 30)
+      text(`Game Over`, width / 2, height / 2 + 30)
 
       // Score
 
@@ -140,12 +157,11 @@ function draw() {
       break
   }
 }
-
 // NEEDS WORK
 function mousePressed() {
   // Check if mouse is inside the circle
   var d = dist(mouseX, mouseY, coreX, coreY);
-  if (d < 100) {
+  if (d < 100 && gameStage === 0) {
     changegameStage()
   }
 }
@@ -162,22 +178,22 @@ function changegameStage() {
 }
 
 function createWalls() {
-  wallTop = createSprite(width / 2, -wallThickness / 2 + 5, width + wallThickness * 2, wallThickness);
+  wallTop = createSprite(width / 2, -wallThickness / 2 + 3, width + wallThickness * 2, wallThickness);
   wallTop.immovable = true;
   walls.add(wallTop)
   wallTop.shapeColor = "#dddddd"
 
-  wallBottom = createSprite(width / 2, height + wallThickness / 2 - 5, width + wallThickness * 2, wallThickness);
+  wallBottom = createSprite(width / 2, height + wallThickness / 2 - 3, width + wallThickness * 2, wallThickness);
   wallBottom.immovable = true;
   walls.add(wallBottom)
   wallBottom.shapeColor = "#dddddd"
 
-  wallLeft = createSprite(-wallThickness / 2 + 5, height / 2, wallThickness, height);
+  wallLeft = createSprite(-wallThickness / 2 + 3, height / 2, wallThickness, height);
   wallLeft.immovable = true;
   walls.add(wallLeft)
   wallLeft.shapeColor = "#dddddd"
 
-  wallRight = createSprite(width + wallThickness / 2 - 5, height / 2, wallThickness, height);
+  wallRight = createSprite(width + wallThickness / 2 - 3, height / 2, wallThickness, height);
   wallRight.immovable = true;
   walls.add(wallRight)
   wallRight.shapeColor = "#dddddd"
@@ -273,22 +289,21 @@ function rotateShields() {
   shield3.position.x = (coreX + armLength * cos(deg3))
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
-
 // NEED TO FIX SPAWNING ONTOP OF CORE
 function createProjectiles(diff) {
   // console.log(width+','+height)
   for (let i = 0; i < 8 + (diff * 5); i++) {
     // set random direction
-    let px = random(wallThickness * 2, width - wallThickness * 2)
-    let py = random(wallThickness * 2, height - wallThickness * 2)
+    let px = random(wallThickness, width - wallThickness)
+    let py = random(wallThickness, height - wallThickness)
     // console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
   }
 }
 
-function createProjectile(x, y) {
-  let a = createSprite(x, y, 10, 10);
+function createProjectile(px, py) {
+  let a = createSprite(px, py, 10, 10);
   // var img = loadImage('assets/asteroid'+floor(random(0, 3))+'.png');
   // a.addImage(img);
   a.setSpeed(4.5, random(360))
@@ -297,6 +312,18 @@ function createProjectile(x, y) {
   a.setCollider('circle', 0, 0, 10)
   projectiles.add(a)
   return a;
+}
+
+function checkProjectiles(){
+  for (var i = 0; i < projectiles.length; i++) {
+    let proj = projectiles[i]
+    if(proj.position.x < 0 || proj.position.x > width) {
+      projectiles[i].remove()
+    }
+    if(proj.position.y < 0 || proj.position.y > height){
+      projectiles[i].remove()
+    }
+  }
 }
 
 function levelOver() {
@@ -311,7 +338,6 @@ function levelOver() {
 }
 
 function hitShield(projectile, shield) {
-
   projectile.remove();
   score += diff
   blocked++
@@ -342,9 +368,15 @@ function getHp() {
 
 function windowResized() {
   let canvasDiv = document.getElementById('canvasDiv')
-  let width = canvasDiv.offsetWidth
-  let height = windowHeight - (windowHeight / 5)
+  width = windowWidth - (windowWidth/5)
+  height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
+  if(gameStage !== 1){
+    for (let i = 0; i < walls.length; i++) {
+      walls[i].remove()
+    }
+    createWalls()
+  }
   // walls.remove()
   // createWalls()
 }
