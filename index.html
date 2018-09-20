@@ -27,19 +27,21 @@
       <h1 id="mainHeader">  </h1>
     </header>
 
-<form id="myForm">
-    <div class="form-group row" id='theForm'>
+    <form id="myForm">
+      <div class="form-group row" id='theForm'>
 
-       <div class="form-group col-4" id="secretpass">
-         <input type="text" id="mylevel" placeholder="enter level here" class="form-control" id="secretpassword">
+        <div class="form-group col-4" id="secretpass">
+          <input type="number" id="mylevel" pattern="[0-9]"placeholder="enter level here" class="form-control" id="secretpassword">
+
        </div>
-       <div class="col-1">
-         <!-- <input type="submit" onclick="this.disabled = true" value="Save"/> -->
-         <!-- <button type="submit" onclick="this.disabled = true" class="btn btn-primary">Submit</button> -->
-         <input type="button" onclick="levelChange()" value="Submit">
+        <div class="col-1">
+          <!-- <input type="submit" onclick="this.disabled = true" value="Save"/> -->
+          <!-- <button type="submit" onclick="this.disabled = true" class="btn btn-primary">Submit</button> -->
+          <input type="button" onclick="levelChange()" value="Submit">
+
        </div>
 
-   </div>
+      </div>
     </form>
 
     <div id="canvasDiv">

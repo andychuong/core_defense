@@ -176,14 +176,6 @@ function draw() {
   }
 }
 
-// function mousePressed() {
-//   // Check if mouse is inside the circle
-//   var d = dist(mouseX, mouseY, coreX, coreY);
-//   if (d < 100 && gameStage === 0) {
-//     changegameStage()
-//   }
-// }
-
 function showLevelInput() {
   if (keyWentDown('esc')) {
     document.getElementById('theForm').style.display = 'block'
@@ -216,9 +208,6 @@ function levelChange(){
   myCore.remove()
   for (let i = 0; i < shields.length; i++) {
     shields[i].remove()
-  }
-  for(let j = 0; j < projectiles.length; j++){
-    projectiles[j].remove()
   }
   setup()
 }
@@ -359,7 +348,8 @@ function rotateShields() {
 // PROJECTILES
 function createProjectiles(diff) {
   // console.log(width+','+height)
-  for (let i = 0; i < 8 + (diff * 5); i++) {
+  // for (let i = 0; i < 8 + (diff * 5); i++) {
+  while(projectiles.length < 8 + (diff * 5)){
     // set random direction
     width = windowWidth - (windowWidth / 5)
     height = windowHeight - (windowHeight / 5)
@@ -369,9 +359,9 @@ function createProjectiles(diff) {
       px = random(wallThickness, width - wallThickness)
       py = random(wallThickness, height - wallThickness)
     }
-    // console.log(px + ',' + py)
     //create sprite
     createProjectile(px, py)
+    checkProjectiles()
   }
 }
 
@@ -379,11 +369,11 @@ function createProjectile(px, py) {
   let a = createSprite(px, py, 10, 10);
   let img = loadImage('img/projectiles.png');
   a.addImage(img);
-  a.setSpeed(random(3.5, 5.5), random(360))
-  a.rotationSpeed = 0.5
-  a.shapeColor = "#ff2222"
+  a.setSpeed(random(3, 5.5), random(360))
+  a.rotationSpeed = random(0.5, 0.8)
   a.setCollider('circle', 0, 0, 10)
   projectiles.add(a)
+
   return a;
 }
 
@@ -460,6 +450,12 @@ function init() {
   healthDiv = document.getElementById('health')
   scoreDiv = document.getElementById('score')
   domLoaded = true
+  window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
   if (gameStage !== 0) {
     scoreDiv.innerText = `score: ${score}`
     healthDiv.innerText = `hp: ${health} `
