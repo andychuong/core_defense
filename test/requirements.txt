@@ -3,8 +3,8 @@ The Frontend Project should:
 [x]You must use a CSS Framework such as Bootstrap or Materialize.
 [x]You must organize your code with functions.
 [x]You must separate your HTML, CSS, and JavaScript into multiple files.
-[]You must include some client-side validation.
-[]You must store some data in Local Storage.
+[x]You must include some client-side validation.
+[x]You must store some data in Local Storage.
 [x]You must allow for users to be able to interact with the site.
 []Integrate with at least one API. See api-list  or Programmable Web API list  for ideas. Be sure to vet your API before committing to it.
 []Have at least three tested functions.

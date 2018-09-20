@@ -35,20 +35,36 @@ let wallThickness = 30;
 let domLoaded = false
 let healthDiv, scoreP
 let showForm = false
+// API
+const url = "https://images-api.nasa.gov/asset/GSFC_20171208_Archive_e000136"
 
 function setup() {
+  // API
+  axios.get(url)
+    .then(function(response) {
+      // handle success
+      bg = loadImage(response.data['collection']['items'][0].href)
+    })
+    .catch(function(error) {
+      // handle error
+      console.log(error)
+    })
+    .then(function() {
+      // always executed
+    });
   // Create canvas and add to dom ---------------------
   let canvasDiv = document.getElementById('canvasDiv')
   var width = windowWidth - (windowWidth / 5)
   var height = windowHeight - (windowHeight / 5)
   background(10)
+
   var myCanvas = createCanvas(width, height);
   myCanvas.parent("canvasDiv")
-
   // Set Global Initial Values ------------------------
   // Core Coordinates
   coreX = width / 2
   coreY = height / 2
+  armLength = 80
   // Collision groups
   shields = new Group()
   projectiles = new Group()
@@ -56,13 +72,17 @@ function setup() {
   // Border walls
   createWalls()
   // Create core
+  if (myCore !== undefined) {
+    myCore.remove()
+  }
+  for (let i = 0; i < shields.length; i++) {
+    shields[i].remove()
+  }
   createCore()
   // Create Shields
   createShields()
   // Create projectiles
-  if(projectiles.length === 0){
-    createProjectiles(diff)
-  }
+  createProjectiles(diff)
   // console.log('setup')
   if (localStorage.getItem("highscore") === null) {
     localStorage.setItem("highscore", "0")
@@ -81,35 +101,25 @@ function draw() {
       score = 0
       blocked = 0
       missed = 0
-      // Objectives
-
-      // Controls
-
-      // Start
-      // ellipseMode(CENTER)
-      // ellipse(coreX, coreY, 200, 200)
-      textSize(20)
-      textAlign(CENTER)
-      // text('Press Space to Start', coreX, coreY)
-      // text(`(or press space)`, coreX, coreY + 20)
-      fill('white')
-      text('Press Space to Start', coreX, coreY)
-      textAlign(LEFT)
-      let xoffset = windowWidth/9
-      text(`W: ↑ Move core up`, coreX - xoffset, 50)
-      text(`S: ↓ Move player down`, coreX - xoffset, 80)
-      text(`A: ← Move player left`, coreX - xoffset, 110)
-      text(`D: → Move player right`, coreX - xoffset, 140)
-      text(`Left Arrow: ⤺ Rotate shields left`, coreX - xoffset, 170)
-      text(`Right Arrow: ⤻ Rotate shields right`, coreX - xoffset, 200)
-      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX - xoffset, 230)
-      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX - xoffset, 260)
-
+      // Objectives & Controls
+      objsAndControls()
+      if (projectiles.length < 1) {
+        createProjectiles(diff)
+      }
+      // Start Game
       if (keyWentDown('space')) {
+        if (projectiles.length < 1) {
+          createProjectiles(diff)
+        }
         changegameStage()
+        document.getElementById('theForm').style.display = 'none'
       }
       break
     case 1: // Game Play
+      background(bg);
+      // 'tint image'
+      background('rgba(0,0,0, 0.5)')
+      // Display level
       textSize(20)
       textAlign(CENTER)
       fill(255, 255, 255)
@@ -134,12 +144,13 @@ function draw() {
       textAlign(CENTER)
       text(`Level ${diff -1} Complete!`, width / 2, height / 2 + 10)
       text(`Press space to continue`, width / 2, height / 2 + 60)
-      // Score
-      // Continue
+
+      // Reset Sprites
       myCore.remove()
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
+      // Start next level
       if (keyDown('space')) {
         gameStage--
         setup()
@@ -149,68 +160,47 @@ function draw() {
       // Game Over Notification
       textSize(50)
       textAlign(CENTER)
-      // text('Press Space to Start', coreX, coreY)
-      // text(`(or press space)`, coreX, coreY + 20)
       fill('white')
       text('Game Over ☹', width / 2 + 10, height / 2)
       textSize(20)
       text('Press space to restart!', width / 2, height / 2 + 30)
-      // Score
-      // Blocked
-      // Missed
-      // Main Menu
+      // Reset Sprites
       myCore.remove()
       health = 100
       diff = 1
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
-      // high score
+      // High Score
       let hs = localStorage.getItem("highscore")
-      if(score > hs || hs === null){
+      if (score > hs || hs === null) {
         localStorage.setItem('highscore', score)
       }
 
-      //
-
-      // NEED TO FIX WEIRD THING WHERE SPACE IS HELD DOWN !!@#!@#
       if (keyWentDown('space')) {
-          gameStage = 0
-          setup()
+        gameStage = 0
+        setup()
       }
       break
   }
 }
 
-function showLevelInput() {
+function showLevelInput() { // Show 'Secret' level input
   if (keyWentDown('esc')) {
-    document.getElementById('theForm').style.display = 'block'
+    document.getElementById('theForm').style.display = 'inline'
     showForm = true
   }
-
-  // if(showForm === true){
-  //   var form = document.getElementById('myForm')
-  // 	form.addEventListener('submit', function(event){
-  //
-  //     event.preventDefault()
-  //     // console.log('lessthing')
-  //     document.getElementById('theForm').style.display = 'none'
-  //
-  //     // console.log(diff)
-  //     showForm = false
-  //
-  //     console.log(diff)
-  //     gameStage++
-  //   })
-  //   // console.log('things')
-  // }
 }
 
-function levelChange(){
+function levelChange() { // Change level on submit button
   document.getElementById('theForm').style.display = 'none'
   var inputLevel = document.getElementById("mylevel")
   var mylevel = inputLevel.value
-  diff = mylevel
+  if (mylevel % 1 === 0) {
+    diff = parseInt(mylevel)
+  } else {
+    alert('please input a valid number')
+  }
   myCore.remove()
   for (let i = 0; i < shields.length; i++) {
     shields[i].remove()
@@ -218,7 +208,48 @@ function levelChange(){
   setup()
 }
 
-function changegameStage() {
+function objsAndControls() { // Display game objectives and controls
+  textSize(20)
+  textAlign(CENTER)
+  // text('Press Space to Start', coreX, coreY)
+  // text(`(or press space)`, coreX, coreY + 20)
+  fill('white')
+  text('Press Space to Start', coreX, coreY + 50)
+  textSize(9)
+  fill(60, 60, 60)
+  text('Press esc to pick your level', 80, height - 20)
+  fill('white')
+  textAlign(LEFT)
+  // OBJECTIVES
+  textSize(30)
+  let xoffset1 = 50
+  text(`Objectives`, xoffset1 - 10, 50)
+  textSize(20)
+
+  text(`Protect the blue core from the red projectiles.`, xoffset1, 80)
+  text(`Block the projectiles with the green shields.`, xoffset1, 110)
+  text(`Blocking will make your score go up.`, xoffset1, 140)
+  text(`Getting hit will lower your HP.`, xoffset1, 170)
+  text(`Getting to 0 HP will end the game.`, xoffset1, 200)
+
+  // CONROLS
+  textSize(30)
+  let xoffset = coreX + windowWidth / 8
+  text(`Controls`, xoffset - 10, 50)
+  textSize(20)
+
+  text(`W: ↑ Move core up`, xoffset, 80)
+  text(`S: ↓ Move player down`, xoffset, 110)
+  text(`A: ← Move player left`, xoffset, 140)
+  text(`D: → Move player right`, xoffset, 170)
+  text(`Left Arrow: ⤺ Rotate shields left`, xoffset, 200)
+  text(`Right Arrow: ⤻ Rotate shields right`, xoffset, 230)
+  text(`Up Arrow: ⤎ ⤏ Move shields away from core`, xoffset, 260)
+  text(`Down Arrow: ⤏ ⤎ Move shields towards core`, xoffset, 290)
+
+}
+
+function changegameStage() { // Change game state
 
   if (gameStage !== 3) {
     gameStage++
@@ -229,7 +260,7 @@ function changegameStage() {
   init()
 }
 
-function createWalls() {
+function createWalls() { // Create border walls
   wallTop = createSprite(width / 2, -wallThickness / 2 + 3, width + wallThickness * 2, wallThickness);
   wallTop.immovable = true;
   walls.add(wallTop)
@@ -251,7 +282,7 @@ function createWalls() {
   wallRight.shapeColor = "#dddddd"
 }
 // CORE
-function createCore() {
+function createCore() { // Create 'core' sprite
   let img = loadImage('img/core1.png');
   myCore = createSprite(coreX, coreY)
   myCore.setCollider('circle', 0, 0, 45)
@@ -259,7 +290,7 @@ function createCore() {
   myCore.addImage(img)
 }
 
-function moveCore() {
+function moveCore() { // Move core using w a s d
   if (keyDown('w')) {
     if (coreY > armLength + shieldSize / 2) {
       coreY -= playerSpd
@@ -284,7 +315,7 @@ function moveCore() {
   myCore.position.y = constrain(coreY, 0 - armLength, height - armLength)
 }
 // SHIELDS
-function createShields() {
+function createShields() { // Create 'shield' sprites
   let img = loadImage('img/shield1.png');
 
   shield0 = createSprite(coreX + armLength * cos(deg0), coreY + armLength * sin(deg0))
@@ -316,7 +347,7 @@ function createShields() {
   shield3.scale = 0.4;
 }
 
-function rotateShields() {
+function rotateShields() { // Rotate and move shields using arrow keys
   if (keyDown(LEFT_ARROW)) {
     deg0 -= rotateSpd
     deg1 -= rotateSpd
@@ -352,10 +383,10 @@ function rotateShields() {
   shield3.position.y = (coreY + armLength * sin(deg3))
 }
 // PROJECTILES
-function createProjectiles(diff) {
+function createProjectiles(diff) { // Generate diff number of projectile sprites
   // console.log(width+','+height)
   // for (let i = 0; i < 8 + (diff * 5); i++) {
-  while(projectiles.length < 8 + (diff * 5)){
+  while (projectiles.length < 8 + (diff * 5)) {
     // set random direction
     width = windowWidth - (windowWidth / 5)
     height = windowHeight - (windowHeight / 5)
@@ -371,20 +402,20 @@ function createProjectiles(diff) {
   }
 }
 
-function createProjectile(px, py) {
+function createProjectile(px, py) { // Create one projectile given x and y
   let a = createSprite(px, py, 10, 10);
   let img = loadImage('img/projectiles.png');
   a.addImage(img);
   a.setSpeed(random(3, 5.5), random(360))
   a.rotationSpeed = random(0.5, 0.8)
   a.scale = random(.9, 1.5)
-  a.setCollider('circle', 0, 0, (10*a.scale))
+  a.setCollider('circle', 0, 0, (10 * a.scale))
   projectiles.add(a)
 
   return a;
 }
 
-function checkProjectiles() {
+function checkProjectiles() { // Check that projectiles are in bounds, weird edge cases?
   for (var i = 0; i < projectiles.length; i++) {
     let proj = projectiles[i]
     if (proj.position.x < 0 || proj.position.x > width) {
@@ -397,18 +428,19 @@ function checkProjectiles() {
   }
 }
 // GAME MECHANICS
-function levelOver() {
+function levelOver() { // Check for remaining projectiles and hp
   if (projectiles.length === 0) {
     gameStage++
     diff++
+    console.log(diff)
     health = 100
   }
   if (domLoaded && gameStage !== 0) {
-    healthDiv.innerText = `hp: ${health} `
+    healthDiv.innerText = `HP: ${health} `
   }
 }
 
-function hitShield(projectile, shield) {
+function hitShield(projectile, shield) { // When a projectile is blocked
   projectile.remove();
   score += parseInt(diff)
   blocked++
@@ -431,19 +463,15 @@ function hitCore(projectile, myCore) {
     gameStage = 3
   }
   levelOver()
-}
-
-function getHp() {
-  // health += 10
-}
+} // When the core is hit
 // NON-P5.JS CODE
-function windowResized() {
+function windowResized() { // Resize Canvas
   let canvasDiv = document.getElementById('canvasDiv')
   width = windowWidth - (windowWidth / 5)
   height = windowHeight - (windowHeight / 5)
   resizeCanvas(width, height);
   if (gameStage !== 1) {
-    walls[i].remove()
+    // walls[i].remove()
     walls.splice(0, 4)
     createWalls()
   }
@@ -451,7 +479,7 @@ function windowResized() {
   // createWalls()
 }
 // Non p5.js code ~ domcontentloaded
-function init() {
+function init() { // Change dom elements
   // DOM
   document.getElementById("mainHeader").innerText = 'Core Defense'
   healthDiv = document.getElementById('health')
@@ -461,10 +489,10 @@ function init() {
   let highscorei = localStorage.getItem("highscore")
   window.addEventListener("keydown", function(e) {
     // space and arrow keys
-    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
+    if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+      e.preventDefault();
     }
-}, false);
+  }, false);
   if (gameStage !== 0) {
     scoreP.innerText = `Score: ${score}`
     highScoreP.innerText = `Highscore: ${highscorei}`
@@ -473,70 +501,3 @@ function init() {
 }
 
 window.addEventListener('load', init);
-
-// OLD CODE. REF MATERIAL ------------>>>>> >>>> >>> >> >
-
-// function mousePressed() {
-//   deg -= .5
-// }
-
-// Temp setup for rotating shields
-
-// function keyPressed() {
-//     if(key === "a"){
-//       deg -= .25
-//       deg2 -= .25
-//       deg3 -= .25
-//       deg4 -= .25
-//     }if(key === "d"){
-//       deg += .25
-//       deg2 += .25
-//       deg3 += .25
-//       deg4 += .25
-//     }
-// }
-
-// move player
-// switch(true){
-//   case keyDown('w'):
-//     coreY -= playerSpd
-//     break
-//   case keyDown('s'):
-//     coreY += playerSpd
-//     break
-//   case keyDown('a'):
-//     coreX -= playerSpd
-//     break
-//   case keyDown('d'):
-//     coreX += playerSpd
-//     break
-// }
-
-//
-// function drawCore() {
-//   fill(255, 0, 0)
-//   ellipseMode(CENTER)
-//   ellipse(coreX, coreY, 25, 25)
-// }
-
-
-// function wallBounce() {
-//   projectiles.bounce(walls);
-//   // projectiles.bounce(wallBottom);
-//   // projectiles.bounce(wallLeft);
-//   // projectiles.bounce(wallRight);
-// }
-
-// for (let i = 0; i < 4; i++) {
-//   `shield${i}` = createSprite(coreX + armLength * cos(`deg${i}`), coreY + armLength * sin(`deg${i}`))
-//   shields.add(`shield${0}`)
-//   `shield${i}`.setCollider('circle', 0, 0, 32)
-//   `shield${i}`.shapeColor = "#00ff00"
-//   `shield${i}`.addImage(img);
-//   `shield${i}`.scale = 0.4;
-// }
-
-//
-// let button = createButton('submit');
-// button.position(coreX + coreY, 65);
-// button.mousePressed(changegameStage);

@@ -5,15 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Core Defense</title>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-  </style>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="css/index.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="js/p5.min.js"></script>
   <script src="js/addons/p5.dom.min.js"></script>
   <!-- <script src="js/addons/p5.sound.min.js"></script> -->
@@ -31,11 +26,9 @@
       <div class="form-group row" id='theForm'>
 
         <div class="form-group col-4" id="secretpass">
-          <input type="text" id="mylevel" pattern="\d*" maxlength="3" placeholder="enter level here" class="form-control" id="secretpassword">
-       </div>
-        <div class="col-1">
-          <!-- <input type="submit" onclick="this.disabled = true" value="Save"/> -->
-          <!-- <button type="submit" onclick="this.disabled = true" class="btn btn-primary">Submit</button> -->
+          <input type="text" size="35" id="mylevel" pattern="\d*" maxlength="3" placeholder="enter level here" class="form-control" id="secretpassword">
+       <!-- </div> -->
+        <!-- <div class="col-1"> -->
           <input type="button" onclick="levelChange()" value="Submit">
        </div>
 
