@@ -58,9 +58,6 @@ function setup() {
   // Create core
   createCore()
   // Create Shields
-  for (let i = 0; i < shields.length ; i++) {
-    shields[i].remove()
-  }
   createShields()
   // Create projectiles
   createProjectiles(diff)
@@ -102,7 +99,7 @@ function draw() {
       text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX - xoffset, 230)
       text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX - xoffset, 260)
 
-      if (keyDown('space')) {
+      if (keyWentDown('space')) {
         changegameStage()
       }
       break
@@ -169,8 +166,8 @@ function draw() {
 
       // NEED TO FIX WEIRD THING WHERE SPACE IS HELD DOWN !!@#!@#
       if (keyWentDown('space')) {
-        gameStage = 0
-        setup()
+          gameStage = 0
+          setup()
       }
       break
   }
@@ -248,7 +245,7 @@ function createWalls() {
 function createCore() {
   let img = loadImage('img/core1.png');
   myCore = createSprite(coreX, coreY)
-  myCore.setCollider('circle', 0, 0, 50)
+  myCore.setCollider('circle', 0, 0, 45)
   // myCore.shapeColor = "#00ddff"
   myCore.addImage(img)
 }
@@ -371,7 +368,8 @@ function createProjectile(px, py) {
   a.addImage(img);
   a.setSpeed(random(3, 5.5), random(360))
   a.rotationSpeed = random(0.5, 0.8)
-  a.setCollider('circle', 0, 0, 10)
+  a.scale = random(.9, 1.5)
+  a.setCollider('circle', 0, 0, (10*a.scale))
   projectiles.add(a)
 
   return a;
