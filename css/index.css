@@ -11,6 +11,7 @@ body {
 
 header {
   text-align: center;
+  color:black;
 }
 
 #defaultCanvas0 {
@@ -27,4 +28,12 @@ footer {
 
 #score {
   padding-left: 20px
+}
+
+#theForm{
+  display: none;
+  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
+
 }

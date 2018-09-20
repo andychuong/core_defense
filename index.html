@@ -11,14 +11,14 @@
       margin: 0;
     }
   </style>
-  <link rel="stylesheet" href="css/index.css">
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/index.css">
   <script src="js/p5.min.js"></script>
   <script src="js/addons/p5.dom.min.js"></script>
   <!-- <script src="js/addons/p5.sound.min.js"></script> -->
   <script src="js/addons/p5.play.js"></script>
   <script src="js/sketch.js"></script>
-
 </head>
 
 <body>
@@ -26,6 +26,21 @@
     <header>
       <h1 id="mainHeader">  </h1>
     </header>
+
+<form id="myForm">
+    <div class="form-group row" id='theForm'>
+
+       <div class="form-group col-4" id="secretpass">
+         <input type="text" id="mylevel" placeholder="enter level here" class="form-control" id="secretpassword">
+       </div>
+       <div class="col-1">
+         <!-- <input type="submit" onclick="this.disabled = true" value="Save"/> -->
+         <!-- <button type="submit" onclick="this.disabled = true" class="btn btn-primary">Submit</button> -->
+         <input type="button" onclick="levelChange()" value="Submit">
+       </div>
+
+   </div>
+    </form>
 
     <div id="canvasDiv">
       <!-- Content added by sketch.js -->

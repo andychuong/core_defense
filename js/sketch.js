@@ -1,6 +1,6 @@
 // Running score
 let score = 0
-/* Program state: 0, 1, 2
+/* Program state: 0, 1, 2, 3
     0 - Intro Screen
     1 - Actual Gameplay
     2 - Between Levels
@@ -26,7 +26,7 @@ let deg1 = 2 * Math.PI
 let deg2 = Math.PI / 2
 let deg3 = -Math.PI / 2
 // Difficulty
-let diff = 10
+let diff = 1
 // Collision Groups
 let shields, projectiles, walls
 // Border wall thickness
@@ -34,6 +34,7 @@ let wallThickness = 30;
 // DOM Stuff
 let domLoaded = false
 let healthDiv, scoreDiv
+let showForm = false
 
 function setup() {
   // Create canvas and add to dom ---------------------
@@ -57,9 +58,13 @@ function setup() {
   // Create core
   createCore()
   // Create Shields
+  for (let i = 0; i < shields.length ; i++) {
+    shields[i].remove()
+  }
   createShields()
   // Create projectiles
   createProjectiles(diff)
+  console.log('setup')
 }
 
 function draw() {
@@ -68,6 +73,7 @@ function draw() {
   drawSprites(walls)
   switch (gameStage) {
     case 0: // Title Screen
+      showLevelInput()
       // Resets
       score = 0
       blocked = 0
@@ -86,15 +92,15 @@ function draw() {
       fill('white')
       text('Press Space to Start', coreX, coreY)
       textAlign(LEFT)
-
-      text(`W: ↑ Move core up`, coreX - 130, 50)
-      text(`S: ↓ Move player down`, coreX - 130, 80)
-      text(`A: ← Move player left`, coreX - 130, 110)
-      text(`D: → Move player right`, coreX - 130, 140)
-      text(`Left Arrow: ⤺ Rotate shields left`, coreX - 130, 170)
-      text(`Right Arrow: ⤻ Rotate shields right`, coreX - 130, 200)
-      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX - 130, 230)
-      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX - 130, 260)
+      let xoffset = windowWidth/9
+      text(`W: ↑ Move core up`, coreX - xoffset, 50)
+      text(`S: ↓ Move player down`, coreX - xoffset, 80)
+      text(`A: ← Move player left`, coreX - xoffset, 110)
+      text(`D: → Move player right`, coreX - xoffset, 140)
+      text(`Left Arrow: ⤺ Rotate shields left`, coreX - xoffset, 170)
+      text(`Right Arrow: ⤻ Rotate shields right`, coreX - xoffset, 200)
+      text(`Up Arrow: ⤎ ⤏ Move shields away from core`, coreX - xoffset, 230)
+      text(`Down Arrow: ⤏ ⤎ Move shields towards core`, coreX - xoffset, 260)
 
       if (keyDown('space')) {
         changegameStage()
@@ -112,7 +118,11 @@ function draw() {
       projectiles.overlap(shields, hitShield)
       projectiles.overlap(myCore, hitCore)
       checkProjectiles()
-      drawSprites() // Draw all Sprites
+      // drawSprites()
+      drawSprite(myCore)
+      drawSprites(shields) // Draw all Sprites
+      drawSprites(projectiles)
+
       break
     case 2: // Between Levels
       // Level Complete Notification
@@ -122,10 +132,8 @@ function draw() {
       text(`Level ${diff -1} Complete!`, width / 2, height / 2 + 10)
       text(`Press space to continue`, width / 2, height / 2 + 60)
       // Score
-
       // Continue
       myCore.remove()
-
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
@@ -133,7 +141,6 @@ function draw() {
         gameStage--
         setup()
       }
-
       break
     case 3: // Game Over: Summary
       // Game Over Notification
@@ -146,11 +153,8 @@ function draw() {
       textSize(20)
       text('Press space to restart!', width / 2, height / 2 + 30)
       // Score
-
       // Blocked
-
       // Missed
-
       // Main Menu
       myCore.remove()
       health = 100
@@ -158,8 +162,13 @@ function draw() {
       for (let i = 0; i < shields.length; i++) {
         shields[i].remove()
       }
+      // high score
+        // check local
+
+      //
+
       // NEED TO FIX WEIRD THING WHERE SPACE IS HELD DOWN !!@#!@#
-      if (keyDown('space')) {
+      if (keyWentDown('space')) {
         gameStage = 0
         setup()
       }
@@ -167,12 +176,51 @@ function draw() {
   }
 }
 
-function mousePressed() {
-  // Check if mouse is inside the circle
-  var d = dist(mouseX, mouseY, coreX, coreY);
-  if (d < 100 && gameStage === 0) {
-    changegameStage()
+// function mousePressed() {
+//   // Check if mouse is inside the circle
+//   var d = dist(mouseX, mouseY, coreX, coreY);
+//   if (d < 100 && gameStage === 0) {
+//     changegameStage()
+//   }
+// }
+
+function showLevelInput() {
+  if (keyWentDown('esc')) {
+    document.getElementById('theForm').style.display = 'block'
+    showForm = true
   }
+
+  // if(showForm === true){
+  //   var form = document.getElementById('myForm')
+  // 	form.addEventListener('submit', function(event){
+  //
+  //     event.preventDefault()
+  //     // console.log('lessthing')
+  //     document.getElementById('theForm').style.display = 'none'
+  //
+  //     // console.log(diff)
+  //     showForm = false
+  //
+  //     console.log(diff)
+  //     gameStage++
+  //   })
+  //   // console.log('things')
+  // }
+}
+
+function levelChange(){
+  document.getElementById('theForm').style.display = 'none'
+  var inputLevel = document.getElementById("mylevel")
+  var mylevel = inputLevel.value
+  diff = mylevel
+  myCore.remove()
+  for (let i = 0; i < shields.length; i++) {
+    shields[i].remove()
+  }
+  for(let j = 0; j < projectiles.length; j++){
+    projectiles[j].remove()
+  }
+  setup()
 }
 
 function changegameStage() {
@@ -313,6 +361,8 @@ function createProjectiles(diff) {
   // console.log(width+','+height)
   for (let i = 0; i < 8 + (diff * 5); i++) {
     // set random direction
+    width = windowWidth - (windowWidth / 5)
+    height = windowHeight - (windowHeight / 5)
     let px = random(wallThickness, width - wallThickness)
     let py = random(wallThickness, height - wallThickness)
     while (dist(coreX, coreY, px, py) < armLength * 2.5) {
@@ -329,7 +379,7 @@ function createProjectile(px, py) {
   let a = createSprite(px, py, 10, 10);
   let img = loadImage('img/projectiles.png');
   a.addImage(img);
-  a.setSpeed(4.5, random(360))
+  a.setSpeed(random(3.5, 5.5), random(360))
   a.rotationSpeed = 0.5
   a.shapeColor = "#ff2222"
   a.setCollider('circle', 0, 0, 10)
@@ -363,7 +413,7 @@ function levelOver() {
 
 function hitShield(projectile, shield) {
   projectile.remove();
-  score += diff
+  score += parseInt(diff)
   blocked++
   console.log(`score: ${score}`)
   if (domLoaded && gameStage !== 0) {

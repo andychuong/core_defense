@@ -16,4 +16,3 @@ To successfully complete the project, you must:
 [x]Include a readme with installation instructions and screenshots.
 []Add your project to an online portfolio.
 []Present your project to your class.
-ho
