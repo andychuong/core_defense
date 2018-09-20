@@ -33,7 +33,7 @@ let shields, projectiles, walls
 let wallThickness = 30;
 // DOM Stuff
 let domLoaded = false
-let healthDiv, scoreDiv
+let healthDiv, scoreP
 let showForm = false
 
 function setup() {
@@ -60,8 +60,14 @@ function setup() {
   // Create Shields
   createShields()
   // Create projectiles
-  createProjectiles(diff)
-  console.log('setup')
+  if(projectiles.length === 0){
+    createProjectiles(diff)
+  }
+  // console.log('setup')
+  if (localStorage.getItem("highscore") === null) {
+    localStorage.setItem("highscore", "0")
+    console.log('local')
+  }
 }
 
 function draw() {
@@ -160,7 +166,10 @@ function draw() {
         shields[i].remove()
       }
       // high score
-        // check local
+      let hs = localStorage.getItem("highscore")
+      if(score > hs || hs === null){
+        localStorage.setItem('highscore', score)
+      }
 
       //
 
@@ -403,9 +412,9 @@ function hitShield(projectile, shield) {
   projectile.remove();
   score += parseInt(diff)
   blocked++
-  console.log(`score: ${score}`)
+  // console.log(`score: ${score}`)
   if (domLoaded && gameStage !== 0) {
-    scoreDiv.innerText = `score: ${score}`
+    scoreP.innerText = `Score: ${score}`
   }
   levelOver()
 }
@@ -415,7 +424,7 @@ function hitCore(projectile, myCore) {
   projectile.remove()
   health -= 10
   missed++
-  console.log(`hp: ${health} `)
+  // console.log(`HP: ${health} `)
   if (health === 0) {
     // alert('game over?!?!?!')
     health === 100
@@ -446,8 +455,10 @@ function init() {
   // DOM
   document.getElementById("mainHeader").innerText = 'Core Defense'
   healthDiv = document.getElementById('health')
-  scoreDiv = document.getElementById('score')
+  scoreP = document.getElementById('myScore')
+  highScoreP = document.getElementById('highScore')
   domLoaded = true
+  let highscorei = localStorage.getItem("highscore")
   window.addEventListener("keydown", function(e) {
     // space and arrow keys
     if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
@@ -455,8 +466,9 @@ function init() {
     }
 }, false);
   if (gameStage !== 0) {
-    scoreDiv.innerText = `score: ${score}`
-    healthDiv.innerText = `hp: ${health} `
+    scoreP.innerText = `Score: ${score}`
+    highScoreP.innerText = `Highscore: ${highscorei}`
+    healthDiv.innerText = `HP: ${health} `
   }
 }
 

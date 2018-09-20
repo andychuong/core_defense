@@ -27,18 +27,16 @@
       <h1 id="mainHeader">  </h1>
     </header>
 
-    <form id="myForm">
+    <form id="myForm" autocomplete="off">
       <div class="form-group row" id='theForm'>
 
         <div class="form-group col-4" id="secretpass">
-          <input type="number" id="mylevel" pattern="[0-9]"placeholder="enter level here" class="form-control" id="secretpassword">
-
+          <input type="text" id="mylevel" pattern="\d*" maxlength="3" placeholder="enter level here" class="form-control" id="secretpassword">
        </div>
         <div class="col-1">
           <!-- <input type="submit" onclick="this.disabled = true" value="Save"/> -->
           <!-- <button type="submit" onclick="this.disabled = true" class="btn btn-primary">Submit</button> -->
           <input type="button" onclick="levelChange()" value="Submit">
-
        </div>
 
       </div>
@@ -49,6 +47,10 @@
     </div>
     <div id="status" class="row">
       <div id="score" class="col-6">
+        <p id = "myScore">
+        </p>
+        <p id = "highScore">
+        </p>
       </div>
       <div id="health" class="col=6">
       </div>
