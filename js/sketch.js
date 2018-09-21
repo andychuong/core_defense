@@ -36,7 +36,7 @@ let domLoaded = false
 let healthDiv, scoreP
 let showForm = false
 // API
-const url = "https://images-api.nasa.gov/asset/GSFC_20171208_Archive_e000136"
+const url = "https://galvanize-cors.herokuapp.com/https://images-api.nasa.gov/asset/GSFC_20171208_Archive_e000136?api_key=NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo"
 
 function setup() {
   // API
