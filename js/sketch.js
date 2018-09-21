@@ -94,6 +94,7 @@ function draw() {
   // Reset Background before drawing
   background(10);
   drawSprites(walls)
+  projectiles.bounce(walls)
   switch (gameStage) {
     case 0: // Title Screen
       showLevelInput()
