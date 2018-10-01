@@ -127,7 +127,7 @@ function draw() {
       text(`Level ${diff}`, width / 2, 30)
       moveCore() // Update Core's x, y
       rotateShields() // Update Shields' rotations
-      projectiles.bounce(walls) // Bounds check
+      // projectiles.bounce(walls) // Bounds check
       // Collision
       projectiles.overlap(shields, hitShield)
       projectiles.overlap(myCore, hitCore)
