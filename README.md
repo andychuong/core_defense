@@ -28,6 +28,9 @@ Shield Rotations
 * Up Arrow: ⤎ ⤏ Move shields away from core
 * Down Arrow: ⤏ ⤎ Move shields towards core
 
+## Gameplay Video
+https://vimeo.com/292864452
+
 ## Planning
 https://trello.com/b/GmAUbxzj/q1-project
 
