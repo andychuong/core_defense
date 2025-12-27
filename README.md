@@ -31,10 +31,6 @@ Shield Rotations
 ## Gameplay Video
 https://vimeo.com/292864452
 
-## Planning
-https://trello.com/b/GmAUbxzj/q1-project
-
 ### Technology
 * HTML, CSS, JavaScript
 * p5.js, p5.play.js, Axios
-* NASA API
