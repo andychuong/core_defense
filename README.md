@@ -6,7 +6,7 @@ Simple browser based defense game
 
 The goal of this game is to protect the core. There are four shields floating around the core that can be rotated. Each shield is 90 degrees from the other.
 
-![Level 1](https://g.chuong.io/coredef/img/level1screenshot.png)
+![Level 1](https://github.com/andychuong/core_defense/blob/master/img/level1screenshot.png?raw=true)
 
 ## Winning and Losing
 
